@@ -1,0 +1,246 @@
+/* --- VARIABLES GLOBALS --- */
+:root {
+  --bg-dark: #0a0b10;
+  --panel-bg: #14161f;
+  --accent-cyan: #00f2ff;
+  --accent-green: #39ff14;
+  --accent-red: #ff3131;
+  --text-main: #e0e6ed;
+  --text-dim: #94a3b8;
+  --border-color: #2d3343;
+  --font-code: 'Fira Code', monospace;
+  --font-ui: 'Orbitron', sans-serif;
+}
+
+/* --- RESET I BASE --- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  font-family: 'Inter', sans-serif;
+  height: 100vh;
+  overflow: hidden;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* --- CAPÇALERA (HEADER) --- */
+.game-header {
+  height: 80px;
+  background: var(--panel-bg);
+  border-bottom: 2px solid var(--accent-cyan);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 30px;
+  box-shadow: 0 0 20px rgba(0, 242, 255, 0.1);
+}
+
+.brand { display: flex; align-items: center; gap: 15px; }
+.logo-icon {
+  font-family: var(--font-ui);
+  font-size: 1.5rem;
+  background: var(--accent-cyan);
+  color: var(--bg-dark);
+  padding: 5px 10px;
+  font-weight: bold;
+  clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+}
+
+.titles h1 { font-family: var(--font-ui); font-size: 1rem; letter-spacing: 2px; }
+.titles h2 { font-size: 0.8rem; color: var(--text-dim); }
+.highlight { color: var(--accent-cyan); text-shadow: 0 0 5px var(--accent-cyan); }
+
+/* BARRA DE PROGRÉS */
+.status-center { width: 35%; }
+.progress-info { display: flex; justify-content: space-between; font-family: var(--font-ui); font-size: 0.6rem; margin-bottom: 5px; }
+.progress-bar-container { height: 10px; background: #1e293b; border-radius: 5px; overflow: hidden; border: 1px solid var(--border-color); }
+.progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent-cyan), var(--accent-green)); box-shadow: 0 0 10px var(--accent-cyan); transition: width 0.5s ease; }
+
+/* --- LAYOUT PRINCIPAL --- */
+.game-layout {
+  display: flex;
+  flex: 1;
+  padding: 20px;
+  gap: 20px;
+  height: calc(100vh - 80px);
+}
+
+/* COLUMNA 1: MISSIONS */
+.mission-control {
+  flex: 1;
+  background: var(--panel-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+.panel-header {
+  background: var(--border-color);
+  padding: 10px;
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  color: var(--accent-cyan);
+}
+
+.panel-body { padding: 20px; flex: 1; overflow-y: auto; }
+#level-title { font-family: var(--font-ui); color: var(--accent-green); margin-bottom: 15px; }
+.mission-description { line-height: 1.6; font-size: 0.9rem; margin-bottom: 20px; color: var(--text-main); }
+
+/* COLUMNA 2: TERMINAL */
+.coding-terminal {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.terminal-header { background: #161b22; padding: 5px 15px; border-radius: 5px 5px 0 0; border: 1px solid var(--border-color); border-bottom: none; }
+.file-name { font-family: var(--font-code); font-size: 0.8rem; color: var(--text-dim); }
+
+#editor {
+  flex: 1;
+  border: 1px solid var(--border-color);
+  border-radius: 0 0 5px 5px;
+  overflow: hidden;
+  font-size: 14px;
+}
+
+/* Botó Run */
+#run-btn {
+  background: var(--accent-green);
+  color: #052e16;
+  border: none;
+  padding: 15px;
+  font-family: var(--font-ui);
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  transition: 0.3s;
+}
+
+#run-btn:hover { background: #2ecc71; transform: scale(1.02); box-shadow: 0 0 15px rgba(57, 255, 20, 0.4); }
+
+.output-console {
+  height: 120px;
+  background: #000;
+  border: 1px solid var(--border-color);
+  padding: 10px;
+  font-family: var(--font-code);
+  font-size: 0.8rem;
+  color: var(--accent-green);
+  overflow-y: auto;
+}
+
+/* COLUMNA 3: MAPA */
+.map-viewer {
+  flex: 1.2;
+  background: var(--panel-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 15px;
+}
+
+.canvas-header { font-family: var(--font-ui); font-size: 0.7rem; margin-bottom: 10px; color: var(--text-dim); }
+.canvas-container {
+  background: #000;
+  border: 2px solid var(--border-color);
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+}
+
+canvas { display: block; image-rendering: pixelated; }
+
+.map-legend {
+  margin-top: 15px;
+  display: flex;
+  gap: 20px;
+  font-size: 0.7rem;
+  font-family: var(--font-ui);
+}
+
+.dot { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; }
+.hero { background: var(--accent-cyan); box-shadow: 0 0 5px var(--accent-cyan); }
+.target { background: var(--accent-green); box-shadow: 0 0 5px var(--accent-green); }
+
+/* --- MODAL DE TEORIA --- */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    display: flex; /* Canviar a 'none' per defecte quan estigui llest */
+    align-items: center; justify-content: center;
+    z-index: 9999;
+}
+
+.modal-content {
+  background: var(--panel-bg);
+  width: 600px;
+  max-width: 90%;
+  border: 2px solid var(--accent-cyan);
+  border-radius: 15px;
+  box-shadow: 0 0 50px rgba(0, 242, 255, 0.2);
+  overflow: hidden;
+}
+
+.modal-header {
+  background: var(--border-color);
+  padding: 20px;
+  border-bottom: 1px solid var(--accent-cyan);
+}
+
+.modal-badge {
+  font-family: var(--font-ui);
+  font-size: 0.6rem;
+  background: var(--accent-cyan);
+  color: var(--bg-dark);
+  padding: 3px 8px;
+  font-weight: bold;
+}
+
+.modal-body { padding: 30px; font-size: 1rem; line-height: 1.6; }
+
+.mission-alert {
+  margin-top: 25px;
+  padding: 15px;
+  background: rgba(57, 255, 20, 0.1);
+  border-left: 4px solid var(--accent-green);
+  display: flex;
+  gap: 15px;
+}
+
+.alert-icon { font-size: 1.5rem; }
+
+#close-theory-btn {
+  width: 100%;
+  padding: 20px;
+  background: var(--accent-cyan);
+  color: var(--bg-dark);
+  font-family: var(--font-ui);
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+#close-theory-btn:hover { background: var(--accent-green); }
+
+/* --- CUSTOMIZACIÓ CODEMIRROR --- */
+.CodeMirror { height: 100% !important; background: #0d1117 !important; }
