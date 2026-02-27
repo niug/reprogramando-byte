@@ -1,24 +1,13 @@
 export const contingutNivells = [
   {
-    titol: "Tipus de Dades",
+    titol: "Tipo de Datos",
     proves: [
       {
-        titol_prova: "Injecció d'Identitat",
-        teoria: "En Python, una <b>variable</b> és com una caixa on guardem informació. Per guardar un text (string) fem servir cometes: <code>nom = 'Byte'</code>. Per números (integers), no calen: <code>edat = 10</code>.",
-        missio: "Configura el protocol inicial: Crea una variable anomenada 'alias' amb el valor 'Byte'.",
-        validar: (py) => py.globals.get("alias") === "Byte"
+        titol_prova: "Inyección de Identidad",
+        teoria: "En Python, una <b>variable</b> es como una caja donde guardamos información. Para guardar un texto (string) utilizacmos comillas: <code>nombre = 'Byte'</code>. Para números (integers), sin comillas: <code>edat = 10</code>.",
+        missio: "Configura el protocolo inicial: Crea una variable que se llame 'alias' con el valor 'Byte'.",
+        validarCodi: (py) => py.globals.get("alias") === "Byte"
       },
-      // ... 3 proves més
-    ]
-  },
-  {
-    titol: "Condicionals",
-    proves: [
-      {
-        missio: "Si la x de l'heroi és 0, mou-lo a la dreta.",
-        hint: "Fes servir 'if heroi.x == 0:'"
-      }
     ]
   }
-  // I així fins a completar els 4 mòduls
 ];

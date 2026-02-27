@@ -1,246 +1,552 @@
-/* --- VARIABLES GLOBALS --- */
+/* VARIABLES DE COLOR */
 :root {
   --bg-dark: #0a0b10;
-  --panel-bg: #14161f;
+  --bg-panel: #14161f;
   --accent-cyan: #00f2ff;
   --accent-green: #39ff14;
   --accent-red: #ff3131;
-  --text-main: #e0e6ed;
-  --text-dim: #94a3b8;
-  --border-color: #2d3343;
-  --font-code: 'Fira Code', monospace;
-  --font-ui: 'Orbitron', sans-serif;
+  --text-main: #e2e8f0;
+  --border: #2d3343;
 }
 
-/* --- RESET I BASE --- */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+* { box-sizing: border-box; }
 
 body {
+  margin: 0;
+  padding: 0;
   background-color: var(--bg-dark);
   color: var(--text-main);
   font-family: 'Inter', sans-serif;
-  height: 100vh;
   overflow: hidden;
 }
-
-#app {
+/* =========================================
+   PÀGINA de LOADING inicial
+   ========================================= */
+/* PANTALLA DE CÀRREGA */
+.loading-screen {
+  position: fixed;
+  inset: 0;
+  background: var(--bg-dark);
   display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
   flex-direction: column;
-  height: 100vh;
 }
 
-/* --- CAPÇALERA (HEADER) --- */
+.loader-container {
+  text-align: center;
+}
+
+/* EL LOGO GIRANT */
+.spinning-logo {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.inner-ring {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 4px solid transparent;
+  border-top-color: var(--accent-cyan);
+  border-bottom-color: var(--accent-cyan);
+  border-radius: 50%;
+  animation: rotate-core 1.5s linear infinite;
+  box-shadow: 0 0 20px rgba(0, 242, 255, 0.4);
+}
+
+.core {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--accent-cyan);
+  text-shadow: 0 0 10px var(--accent-cyan);
+}
+
+.loading-text {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1rem;
+  letter-spacing: 4px;
+  color: var(--text-main);
+  margin-bottom: 10px;
+}
+
+.loading-subtext {
+  font-family: 'Fira Code', monospace;
+  font-size: 0.8rem;
+  color: var(--accent-green);
+  opacity: 0.8;
+  margin-bottom: 20px;
+}
+
+/* BARRA DE PROGRESS DE CÀRREGA */
+.loading-bar {
+  width: 250px;
+  height: 4px;
+  background: #1e293b;
+  border-radius: 2px;
+  overflow: hidden;
+  margin: 0 auto;
+}
+
+.loading-progress {
+  width: 40%;
+  height: 100%;
+  background: var(--accent-cyan);
+  box-shadow: 0 0 10px var(--accent-cyan);
+  animation: loading-slide 2s infinite ease-in-out;
+}
+
+/* ANIMACIONS */
+@keyframes rotate-core {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes loading-slide {
+  0% { transform: translateX(-100%); }
+  50% { transform: translateX(250%); }
+  100% { transform: translateX(-100%); }
+}
+
+/* =========================================
+   Pantalla TEORIA
+   ========================================= */
+/* CARD PRINCIPAL */
+.teoria-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px); 
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  z-index: 9999;
+  padding: 20px;
+}
+
+.teoria-card {
+  background: var(--bg-panel);
+  width: 100%;
+  max-width: 800px;
+  margin: 0; 
+  border: 1px solid var(--accent-cyan);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  max-height: 90vh; 
+}
+
+/* HEADER AMB AIRE */
+.header-teoria {
+  padding: 30px 40px 20px 40px;
+  border-bottom: 1px solid var(--border);
+}
+
+.badge {
+  background: rgba(0, 242, 255, 0.1);
+  color: var(--accent-cyan);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+/* CONTINGUT AMB PADDING LATERAL GENERÓS */
+.teoria-content {
+  padding: 30px 50px;
+  overflow-y: auto;
+  flex: 1;
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-cyan) transparent;
+}
+
+.text-section {
+  line-height: 1.8;
+  font-size: 1.05rem;
+  color: var(--text-main);
+}
+
+/* SECCIÓ MISSIÓ */
+.missio-section {
+  margin-top: 30px;
+  padding: 20px 25px;
+  background: rgba(57, 255, 20, 0.05);
+  border-left: 4px solid var(--accent-green);
+  border-radius: 4px;
+}
+
+.missio-section h3 {
+  color: var(--accent-green);
+  font-size: 0.9rem;
+  margin-top: 0;
+}
+
+/* FOOTER I BOTÓ CENTRAT */
+.footer-teoria {
+  padding: 30px 40px;
+  display: flex;
+  justify-content: center;
+  border-top: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.btn-start {
+  min-width: 280px;
+  padding: 16px 32px;
+  background: var(--accent-cyan);
+  color: #000;
+  border: none;
+  border-radius: 4px;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.btn-start:hover {
+  background: var(--accent-green);
+  box-shadow: 0 0 20px var(--accent-green);
+  transform: scale(1.05);
+}
+
+/* =========================================
+   CAPÇALERA 
+   ========================================= */
 .game-header {
   height: 80px;
-  background: var(--panel-bg);
-  border-bottom: 2px solid var(--accent-cyan);
+  background: linear-gradient(90deg, #14161f 0%, #0a0b10 100%);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 30px;
-  box-shadow: 0 0 20px rgba(0, 242, 255, 0.1);
+  border-bottom: 2px solid var(--accent-cyan);
+  box-shadow: 0 4px 20px rgba(0, 242, 255, 0.2);
 }
 
-.brand { display: flex; align-items: center; gap: 15px; }
-.logo-icon {
-  font-family: var(--font-ui);
-  font-size: 1.5rem;
-  background: var(--accent-cyan);
-  color: var(--bg-dark);
-  padding: 5px 10px;
-  font-weight: bold;
-  clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+.brand h1 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.2rem;
+  margin: 0;
+  letter-spacing: 2px;
+  color: #fff;
 }
 
-.titles h1 { font-family: var(--font-ui); font-size: 1rem; letter-spacing: 2px; }
-.titles h2 { font-size: 0.8rem; color: var(--text-dim); }
-.highlight { color: var(--accent-cyan); text-shadow: 0 0 5px var(--accent-cyan); }
-
-/* BARRA DE PROGRÉS */
-.status-center { width: 35%; }
-.progress-info { display: flex; justify-content: space-between; font-family: var(--font-ui); font-size: 0.6rem; margin-bottom: 5px; }
-.progress-bar-container { height: 10px; background: #1e293b; border-radius: 5px; overflow: hidden; border: 1px solid var(--border-color); }
-.progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent-cyan), var(--accent-green)); box-shadow: 0 0 10px var(--accent-cyan); transition: width 0.5s ease; }
-
-/* --- LAYOUT PRINCIPAL --- */
-.game-layout {
-  display: flex;
-  flex: 1;
-  padding: 20px;
-  gap: 20px;
-  height: calc(100vh - 80px);
+.highlight {
+  color: var(--accent-cyan);
+  text-shadow: 0 0 8px var(--accent-cyan);
 }
 
-/* COLUMNA 1: MISSIONS */
-.mission-control {
-  flex: 1;
-  background: var(--panel-bg);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
+.status-center {
+  width: 40%;
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
-.panel-header {
-  background: var(--border-color);
-  padding: 10px;
-  font-family: var(--font-ui);
-  font-size: 0.7rem;
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.8rem;
+  margin-bottom: 5px;
   color: var(--accent-cyan);
 }
 
-.panel-body { padding: 20px; flex: 1; overflow-y: auto; }
-#level-title { font-family: var(--font-ui); color: var(--accent-green); margin-bottom: 15px; }
-.mission-description { line-height: 1.6; font-size: 0.9rem; margin-bottom: 20px; color: var(--text-main); }
+.progress-bar-container {
+  width: 100%;
+  height: 8px;
+  background: #1e293b;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 242, 255, 0.3);
+}
 
-/* COLUMNA 2: TERMINAL */
-.coding-terminal {
+.progress-bar-fill {
+  height: 100%;
+  background: var(--accent-cyan);
+  box-shadow: 0 0 10px var(--accent-cyan);
+  transition: width 0.5s ease-in-out;
+}
+
+/* =========================================
+   LAYOUT DE JOC (2 COLUMNES)
+   ========================================= */
+.game-screen {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 80px);
+}
+
+.workspace {
+  display: flex;
+  flex: 1;
+}
+
+/* COLUMNA EDITOR */
+.editor-column {
+  flex: 1;
+  min-width: 450px;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-panel);
+  border-right: 2px solid var(--border);
+}
+
+.editor-wrapper {
+  flex: 1;
+  position: relative; 
+  display: flex;
+  flex-direction: column;
+  min-height: 0; 
+}
+
+.editor-container {
+  flex: 1;
+  overflow: hidden; 
+}
+
+/* EL BOTÓ FLOTANT */
+.run-button-floating {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  z-index: 10; 
+  
+  background: var(--accent-cyan);
+  color: #000;
+  border: none;
+  padding: 12px 24px;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: bold;
+  font-size: 0.9rem;
+  border-radius: 4px;
+  cursor: pointer;
+  
+  box-shadow: 0 4px 15px rgba(0, 242, 255, 0.3);
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+}
+
+.run-button-floating:hover {
+  transform: scale(1.05) translateY(-2px);
+  box-shadow: 0 0 25px var(--accent-green);
+  background: var(--accent-green);
+}
+
+.run-button-floating:active {
+  transform: translateY(1px);
+}
+
+.run-button-floating.disabled {
+  background: #444;
+  color: #888;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.cm-editor {
+  padding-bottom: 60px; 
+}
+.panel-header {
+  background: #1e222d;
+  padding: 10px 15px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.7rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--text-main);
+}
+
+/* COLUMNA VISUAL (TERRENY DE JOC) */
+.visual-column {
   flex: 2;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-}
-
-.terminal-header { background: #161b22; padding: 5px 15px; border-radius: 5px 5px 0 0; border: 1px solid var(--border-color); border-bottom: none; }
-.file-name { font-family: var(--font-code); font-size: 0.8rem; color: var(--text-dim); }
-
-#editor {
-  flex: 1;
-  border: 1px solid var(--border-color);
-  border-radius: 0 0 5px 5px;
-  overflow: hidden;
-  font-size: 14px;
-}
-
-/* Botó Run */
-#run-btn {
-  background: var(--accent-green);
-  color: #052e16;
-  border: none;
-  padding: 15px;
-  font-family: var(--font-ui);
-  font-weight: bold;
-  cursor: pointer;
-  border-radius: 5px;
-  display: flex;
-  justify-content: center;
   align-items: center;
-  gap: 10px;
-  transition: 0.3s;
+  justify-content: center;
+  background: radial-gradient(circle, #1a1b26 0%, #050505 100%);
+  padding: 20px;
 }
 
-#run-btn:hover { background: #2ecc71; transform: scale(1.02); box-shadow: 0 0 15px rgba(57, 255, 20, 0.4); }
-
-.output-console {
-  height: 120px;
+.canvas-wrapper {
+  position: relative;
+  border: 2px solid var(--border);
   background: #000;
-  border: 1px solid var(--border-color);
   padding: 10px;
-  font-family: var(--font-code);
-  font-size: 0.8rem;
-  color: var(--accent-green);
-  overflow-y: auto;
+  box-shadow: 0 0 40px rgba(0,0,0,0.5);
 }
 
-/* COLUMNA 3: MAPA */
-.map-viewer {
-  flex: 1.2;
-  background: var(--panel-bg);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
+canvas {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.mission-reminder {
+  margin-top: 20px;
+  background: rgba(0, 242, 255, 0.05);
+  padding: 15px 25px;
+  border-radius: 30px;
+  border: 1px solid rgba(0, 242, 255, 0.2);
+  font-size: 0.9rem;
+  color: var(--accent-cyan);
+}
+
+/* =========================================
+   PEU DE PÀGINA (CONSOLA)
+   ========================================= */
+.console-tab {
+  color: var(--text-dim);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  border-bottom: 1px solid #222;
+  padding-bottom: 4px;
+}
+
+.game-screen {
   display: flex;
   flex-direction: column;
+  height: calc(100vh - 60px); 
+  overflow: hidden; 
+}
+
+.workspace {
+  display: flex;
+  flex: 1; 
+  min-height: 0; 
+}
+.console-footer {
+  height: 160px; 
+  background: #050505;
+  border-top: 2px solid var(--accent-cyan);
+  display: flex;
+  flex-direction: column; 
+  flex-shrink: 0;
+}
+
+/* Capçalera fixa de la consola */
+.console-header {
+  background: #111;
+  padding: 5px 20px;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  padding: 15px;
+  border-bottom: 1px solid #222;
 }
 
-.canvas-header { font-family: var(--font-ui); font-size: 0.7rem; margin-bottom: 10px; color: var(--text-dim); }
-.canvas-container {
-  background: #000;
-  border: 2px solid var(--border-color);
-  box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
-}
-
-canvas { display: block; image-rendering: pixelated; }
-
-.map-legend {
-  margin-top: 15px;
-  display: flex;
-  gap: 20px;
+.console-title {
+  color: var(--accent-cyan);
+  font-family: 'Orbitron', sans-serif;
   font-size: 0.7rem;
-  font-family: var(--font-ui);
+  font-weight: bold;
+  letter-spacing: 1px;
 }
 
-.dot { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; }
-.hero { background: var(--accent-cyan); box-shadow: 0 0 5px var(--accent-cyan); }
-.target { background: var(--accent-green); box-shadow: 0 0 5px var(--accent-green); }
-
-/* --- MODAL DE TEORIA --- */
-.modal-overlay {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.85);
-    backdrop-filter: blur(8px);
-    display: flex; /* Canviar a 'none' per defecte quan estigui llest */
-    align-items: center; justify-content: center;
-    z-index: 9999;
-}
-
-.modal-content {
-  background: var(--panel-bg);
-  width: 600px;
-  max-width: 90%;
-  border: 2px solid var(--accent-cyan);
-  border-radius: 15px;
-  box-shadow: 0 0 50px rgba(0, 242, 255, 0.2);
-  overflow: hidden;
-}
-
-.modal-header {
-  background: var(--border-color);
-  padding: 20px;
-  border-bottom: 1px solid var(--accent-cyan);
-}
-
-.modal-badge {
-  font-family: var(--font-ui);
+.console-status {
+  color: var(--accent-green);
+  font-family: 'Fira Code', monospace;
   font-size: 0.6rem;
-  background: var(--accent-cyan);
-  color: var(--bg-dark);
-  padding: 3px 8px;
-  font-weight: bold;
+  animation: blink 1.5s infinite; 
 }
 
-.modal-body { padding: 30px; font-size: 1rem; line-height: 1.6; }
-
-.mission-alert {
-  margin-top: 25px;
-  padding: 15px;
-  background: rgba(57, 255, 20, 0.1);
-  border-left: 4px solid var(--accent-green);
-  display: flex;
-  gap: 15px;
+/* Contenidor del contingut de la consola */
+.console-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px 20px;
+  background: rgba(0, 0, 0, 0.4); 
+  
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-cyan) transparent;
 }
 
-.alert-icon { font-size: 1.5rem; }
+/* Estils de scroll per a Chrome, Edge i Safari */
+.console-content::-webkit-scrollbar {
+  width: 6px; 
+}
 
-#close-theory-btn {
-  width: 100%;
-  padding: 20px;
-  background: var(--accent-cyan);
-  color: var(--bg-dark);
-  font-family: var(--font-ui);
-  font-weight: bold;
+.console-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.console-content::-webkit-scrollbar-thumb {
+  background-color: var(--accent-cyan);
+  border-radius: 10px;
+  box-shadow: 0 0 10px var(--accent-cyan);
+}
+
+.console-content::-webkit-scrollbar-thumb:hover {
+  background-color: var(--accent-green);
+}
+
+.console-log {
+  color: var(--accent-green);
+  font-family: 'Fira Code', monospace;
+  font-size: 0.9rem;
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-all;
+  line-height: 1.4;
+}
+
+/* Animació opcional per al status */
+@keyframes blink {
+  0% { opacity: 1; }
+  50% { opacity: 0.3; }
+  100% { opacity: 1; }
+}
+
+/* =========================================
+   BOTONS I ACCIONS
+   ========================================= */
+.run-button {
+  background: var(--accent-green);
+  color: #000;
   border: none;
+  padding: 15px;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: bold;
   cursor: pointer;
-  transition: 0.3s;
+  letter-spacing: 1px;
 }
 
-#close-theory-btn:hover { background: var(--accent-green); }
+.run-button:hover {
+  background: #fff;
+  box-shadow: 0 0 15px var(--accent-green);
+}
 
-/* --- CUSTOMIZACIÓ CODEMIRROR --- */
-.CodeMirror { height: 100% !important; background: #0d1117 !important; }
+.btn-back {
+  background: transparent;
+  border: 1px solid var(--text-dim);
+  color: var(--text-dim);
+  padding: 4px 10px;
+  font-size: 0.6rem;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.btn-back:hover {
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+}

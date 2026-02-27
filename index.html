@@ -1,121 +1,31 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reprogramando la huida de Byte</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/codemirror.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/theme/dracula.min.css">
-    <link rel="stylesheet" href="src/style.css">
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/codemirror.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/mode/python/python.min.js"></script>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reprogramando Byte | Python</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&family=Orbitron:wght@400;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
     <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
-</head>
-<body>
-    <div id="app">
-        <header class="game-header">
-            <div class="brand">
-                <div class="logo-icon">01</div>
-                <div class="titles">
-                    <h1>REPROGRAMANDO LA HUIDA</h1>
-                    <h2>DE <span class="highlight">BYTE</span></h2>
-                </div>
-            </div>
 
-            <div class="status-center">
-                <div class="progress-info">
-                    <span>PROGRESO</span>
-                    <span id="progress-percent">0%</span>
-                </div>
-                <div class="progress-bar-container">
-                    <div class="progress-bar-fill" style="width: 0%;"></div>
-                </div>
-            </div>
+    <style>
+      body {
+        margin: 0;
+        background-color: #0a0b10;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
 
-            <div class="user-status">
-                <div class="status-dot"></div>
-                <span id="connection-status">CONECTANDO CON EL NÚCLEO...</span>
-            </div>
-        </header>
+    <script type="module" src="./src/main.jsx"></script>
 
-        <main class="game-layout">
-            
-            <aside class="mission-control">
-                <div class="panel-header">OBJETIVO DE SISTEMA</div>
-                <div class="panel-body">
-                    <div id="level-title">MÒDUL 01: INICIALITZACIÓ</div>
-                    <div class="mission-description">
-                        <p id="mission-text">Byte està atrapat al sector de memòria 0x01. Defineix la seva identitat per poder obrir la primera porta.</p>
-                    </div>
-                    <div class="objective-list">
-                        <div class="obj-item">
-                            <input type="checkbox" disabled id="obj-1">
-                            <label for="obj-1">Arriba a la sortida</label>
-                        </div>
-                    </div>
-                </div>
-                <div class="panel-footer">
-                    <small>SISTEMA OPERATIU: PYTHON 3.14</small>
-                </div>
-            </aside>
-
-            <section class="coding-terminal">
-                <div class="terminal-header">
-                    <span class="file-name">reprogramacio.py</span>
-                </div>
-                <div id="editor"></div>
-                <div class="actions">
-                    <button id="run-btn">
-                        <span class="btn-text">EXECUTAR SCRIPT</span>
-                        <span class="btn-icon">⚡</span>
-                    </button>
-                </div>
-                <div class="output-console">
-                    <div class="console-label">SORTIDA DE DADES:</div>
-                    <div id="console">/> Preparat per a la fugida...</div>
-                </div>
-            </section>
-
-            <section class="map-viewer">
-                <div class="canvas-header">MAPA DEL SECTOR</div>
-                <div class="canvas-container">
-                    <canvas id="gameCanvas" width="400" height="400"></canvas>
-                </div>
-                <div class="map-legend">
-                    <span><i class="dot hero"></i> Byte</span>
-                    <span><i class="dot target"></i> Port de Fugida</span>
-                </div>
-            </section>
-
-        </main>
-    <div id="theory-modal" class="modal-overlay">
-    <div class="modal-content">
-        <div class="modal-header">
-            <span class="modal-badge">TEORIA DE SISTEMA</span>
-            <h2 id="theory-title">Mòdul 1: Variables</h2>
-        </div>
-        <div class="modal-body">
-            <div id="theory-explanation">
-                </div>
-            <div class="mission-alert">
-                <span class="alert-icon">⚠️</span>
-                <div>
-                    <strong>ENUNCIAT DE LA MISSIÓ:</strong>
-                    <p id="theory-mission">Defineix la identitat d'en Byte...</p>
-                </div>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button id="close-theory-btn">ENTÈS, COMENÇAR REPROGRAMACIÓ</button>
-        </div>
-    </div>
-</div>
-    </div>
-
-    <script type="module" src="./src/main.js"></script>
-</body>
+    <script>
+      console.log("/> Inicialitzant nucli de dades...");
+    </script>
+  </body>
 </html>
