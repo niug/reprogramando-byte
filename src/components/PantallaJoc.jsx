@@ -39,20 +39,22 @@ export default function PantallaJoc({ dades, alTornarTeoria, alSuperar }) {
         }
         });
 
-        const codiPrevi = motorRef.current.generarCodiPrevi();
+        const codiPrevi = ""; //motorRef.current.generarCodiPrevi();
         
         // 3. Executem el codi
         await py.runPythonAsync(codiPrevi + "\n" + codi);
         
         // 4. Lògica del robot (moviments)
-        const heroiPy = py.globals.get("heroi");
-        const itinerari = heroiPy.itinerari.toJs();
-        await motorRef.current.animarMoviments(itinerari);
+        // const heroiPy = py.globals.get("heroi");
+        // const itinerari = heroiPy.itinerari.toJs();
+        // await motorRef.current.animarMoviments(itinerari);
 
         // Validació final
-        if (dades.validarCodi(codi)) {
-        setConsola((prev) => prev + "\n/> ✅ GENIAL: Misión completada.");
-        setTimeout(alSuperar, 1500);
+        if (dades.validarCodi(py)) {
+            setConsola((prev) => prev + "\n/> ✅ GENIAL: Misión completada.");
+            setTimeout(alSuperar, 1500);
+        } else {
+            setConsola((prev) => prev + "\n/> ⚠️ ERROR: Misión programada incorrectamente.");
         }
 
     } catch (err) {

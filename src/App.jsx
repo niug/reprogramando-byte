@@ -46,7 +46,7 @@ function App() {
 
     if (esUltimaProvaDelNivell) {
       if (esUltimNivell) {
-        alert("FELICITATS! Has completado la huida de Byte!");
+        alert("FELICIDADES! Has completado la huida de Byte!");
       } else {
         setNivellActual(prev => prev + 1);
         setProvaActual(0);
