@@ -13,7 +13,7 @@ export default function App() {
     <div className="min-h-screen flex items-center justify-center bg-gray-900">
       <div className="text-white text-center">
         <div className="text-6xl mb-4 animate-bounce">🤖</div>
-        <p>Carregant CodeQuest...</p>
+        <p>Cargando Reprogramando-byte...</p>
       </div>
     </div>
   );
