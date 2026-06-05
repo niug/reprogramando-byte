@@ -38,7 +38,7 @@ export default function Theory() {
           color: "#00ffb4", fontFamily: "'Share Tech Mono',monospace",
           fontSize: 13, background: "none", border: "none", cursor: "pointer",
           opacity: 0.7, letterSpacing: "0.05em"
-        }}>← INICI</button>
+        }}>← INICIO</button>
         <span style={{ color: "rgba(0,255,180,0.3)" }}>|</span>
         <span style={{
           fontFamily: "'Orbitron',monospace", fontSize: 13,
@@ -47,7 +47,7 @@ export default function Theory() {
         <span style={{
           marginLeft: "auto", fontFamily: "'Share Tech Mono',monospace",
           fontSize: 11, color: "rgba(0,255,180,0.5)", letterSpacing: "0.08em"
-        }}>TEORIA · BLOC {BLOCKS.findIndex(b => b.id === blockId) + 1} / {BLOCKS.length}</span>
+        }}>TEORÍA · BLOQUE {BLOCKS.findIndex(b => b.id === blockId) + 1} / {BLOCKS.length}</span>
       </header>
 
       {/* Contingut */}
@@ -60,7 +60,7 @@ export default function Theory() {
           color: "#00ffb4", fontFamily: "'Share Tech Mono',monospace",
           fontSize: 10, letterSpacing: "0.15em", padding: "3px 10px",
           marginBottom: 14, textTransform: "uppercase"
-        }}>BRIEFING DE MISSIÓ</div>
+        }}>BRIEFING DE LA MISIÓN</div>
 
         {/* Títol */}
         <h1 style={{
@@ -102,7 +102,7 @@ export default function Theory() {
           <div style={{
             fontFamily: "'Orbitron',monospace", fontSize: 10,
             color: "#00ffb4", letterSpacing: "0.18em", marginBottom: 8
-          }}>OBJECTIU:</div>
+          }}>OBJECTIVO:</div>
           <p style={{ fontSize: 15, color: "#c8d8f0", lineHeight: 1.6, margin: 0 }}>
             {block.challenges[0].description.split("\n")[0]}
           </p>
@@ -119,7 +119,7 @@ export default function Theory() {
             padding: 16, border: "none", cursor: "pointer",
             borderRadius: 2
           }}>
-          INICIAR REPROGRAMACIÓ →
+          INICIAR REPROGRAMACIÓN →
         </button>
       </main>
 

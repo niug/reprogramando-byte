@@ -1,98 +1,199 @@
+// ============================================================
+//  CODEQUEST — CURRICULUM COMPLET
+//  4 mòduls × 3 reptes = 12 missions
+//  Mecàniques: robot.print_robot(), dreta/esquerra/amunt/avall,
+//              pedra_davant/amunt/avall/esquerra(), porta de sortida
+// ============================================================
+export const GLOBAL_HIDDEN_CODE = `
+# ── Variables globals del sistema ──────────────────────────
+sistema     = "ByteOS"
+versio      = 11.4
+sector      = "ALPHA-7"
+color_robot = "verd"
+
+# ── Funcions d'utilitat globals ─────────────────────────────
+def missatge_sistema(text):
+    """Mostra un missatge amb prefix del sistema."""
+    robot.print_robot(f"[{sistema}] {text}")
+def print_robot(text):
+    """Mostra un missatge amb prefix del sistema."""
+    robot.print_robot(f"{text}")
+
+def es_parell(n):
+    """Retorna True si n és parell."""
+    return n % 2 == 0
+
+def es_positiu(n):
+    """Retorna True si n és positiu."""
+    return n > 0
+
+def maxim(a, b):
+    """Retorna el major dels dos valors."""
+    return a if a > b else b
+
+def minim(a, b):
+    """Retorna el menor dels dos valors."""
+    return a if a < b else b
+`;
+
 export const BLOCKS = [
+
+  // ════════════════════════════════════════════════════════
+  //  MÒDUL 1 — TIPOS DE DADES I VARIABLES
+  // ════════════════════════════════════════════════════════
   {
     id: "variables",
-    title: "Tipus de dades i variables",
+    title: "Tipos de datos y variables",
     icon: "📦",
     color: "blue",
     theory: {
       content: `
-## Tipus de dades i variables
+## Tipos de datos y variables
 
-Una **variable** és com una caixa on guardem informació.
+Una **variable** es com una caja donde guardamos información.
 
 \`\`\`python
-nom = "Anna"       # String (text)
-edat = 17          # Integer (número enter)
+nombre = "Anna"    # String (text)
+edad = 17          # Integer (número enter)
 nota = 9.5         # Float (decimal)
-aprovat = True     # Boolean (cert/fals)
+aprovada = True    # Boolean (cert/fals)
 \`\`\`
 
-### Tipus principals:
-- **str** → text entre cometes: \`"hola"\`
-- **int** → números enters: \`42\`
-- **float** → decimals: \`3.14\`
-- **bool** → True o False
+### Tipos principales:
+- **str** → texto entre comillas: \`"hola"\`
+- **int** → números enteros: \`42\`
+- **float** → decimales: \`3.14\`
+- **bool** → Booleanos: True o False
 
-### Operacions bàsiques:
+### Operaciones básicas:
 \`\`\`python
-# Concatenar text
-salutació = "Hola, " + nom
-
-# Operacions matemàtiques
-resultat = edat * 2
-
-# Convertir tipus
-text_edat = str(edat)
+salutacion = "Hola, " + nom   # concatenar text
+doble = edad * 2              # multiplicar
+texto_edad = str(edat)        # convertir a text
 \`\`\`
       `
     },
     challenges: [
+
+      // ── M1 · R1 ─────────────────────────────────────────
       {
         id: "var_1",
-        title: "Presentació del robot",
-        description: `El robot no sap qui és! Crea dues variables:
-- \`nom\` amb el teu nom
-- \`edat\` amb la teva edat
+        title: "Identificación del agente",
+        description: `El robot ha olvidado información básica sobre sí mismo. Debes guardar sus datos en variables.
 
-Després fes que el robot es presenti amb:
-\`robot.say(f"Hola! Em dic {nom} i tinc {edat} anys")\``,
-        starterCode: `# Crea les variables
-nom = 
-edat = 
+Crea las siguientes variables:
+- \`nombre\` nombre del robot (texto).
+- \`energia\` cantidad de energía que le queda (entero).
+- \`velocidad\` velocidad máxima en km/h (decimal).
+- \`activo\` indica si está encendido o apagado (booleano).`,
+        starterCode: `# Define las siguientes variables:
+# nombre (texto)
+# energia (entero)
+# velocidad (decimal)
+# activo (booleano)
 
-# Fes parlar el robot
-robot.say(f"Hola! Em dic {nom} i tinc {edat} anys")`,
-        solution: (output, robotActions) =>
-          robotActions.some(a => a.type === "say" && a.text.includes("Hola")),
-        robotActions: ["say"],
-        hint: "Recorda posar el text entre cometes: nom = \"Anna\""
+`,
+        endCode: `
+if (
+    isinstance(nombre, str) and
+    isinstance(energia, int) and
+    isinstance(velocidad, float) and
+    isinstance(activo, bool)
+):
+    print_robot(f"-CORRECTO! Robot: {nombre}, energia {energia}, velocidad: {velocidad}, activo: {activo}")
+else:
+    print_robot("-ERROR! Alguna de las variables no es de tipo correcto.")`,
+
+        grid: {
+          cols: 6, rows: 4,
+          robotStart: [1, 0],
+          rocks: [],
+          door: null
+        },
+        // Superado si el robot habla e incluye el texto correcto
+        solution: (output, actions) =>
+          actions.some(a => a.type === "say" &&
+            a.text.toLowerCase().includes("-correcto!")),
+        hint: 'nom = "Anna" — recuerda las comillas para los textos!'
       },
+
+      // ── M1 · R2 ─────────────────────────────────────────
       {
         id: "var_2",
-        title: "La calculadora del robot",
-        description: `El robot vol calcular l'àrea d'un rectangle.
-Crea les variables \`amplada\` i \`altura\` amb els valors que vulguis, calcula l'\`area\` i mostra-la:
-\`robot.say(f"L'àrea és {area}")\``,
-        starterCode: `amplada = 
-altura = 
-area = 
+        title: "El missatge encriptat",
+        description: `El robot ha de travessar el corredor i pronunciar el codi secret a la sortida.
 
-robot.say(f"L'àrea és {area}")`,
-        solution: (output, robotActions) =>
-          robotActions.some(a => a.type === "say" && a.text.includes("àrea")),
-        robotActions: ["say"],
-        hint: "L'àrea = amplada * altura"
+1. Crea \`codi\` concatenant dos textos: \`"BYTE"\` + \`"OS"\`
+2. Crea \`versio\` amb el número \`11\`
+3. Fes que el robot avanci fins a la porta dient:
+   \`robot.print_robot(f"Codi: {codi} v{versio}")\`
+4. Arriba a la porta amb \`robot.dreta()\``,
+        starterCode: `# Crea les variables
+codi = "BYTE" + 
+versio = 
+
+# El robot parla i avança
+robot.print_robot(f"Codi: {codi} v{versio}")
+robot.dreta()
+robot.dreta()
+robot.dreta()
+robot.dreta()`,
+        grid: {
+          cols: 6, rows: 3,
+          robotStart: [1, 0],
+          rocks: [],
+          door: [1, 5]
+        },
+        solution: (output, actions) =>
+          actions.some(a => a.type === "say") &&
+          actions.some(a => a.type === "door"),
+        hint: 'codi = "BYTE" + "OS" → "BYTEOS". Compte els passos fins a la porta!'
       },
+
+      // ── M1 · R3 ─────────────────────────────────────────
       {
         id: "var_3",
-        title: "Conversió de tipus",
-        description: `El robot vol saber d'aquí quants anys tindrà el doble de la teva edat actual.
-1. Guarda la teva edat en una variable \`edat\`
-2. Calcula \`doble = edat * 2\`  
-3. Calcula \`anys_fins = doble - edat\`
-4. \`robot.say(f"D'aquí {anys_fins} anys tindré {doble} anys")\``,
-        starterCode: `edat = 
-doble = 
-anys_fins = 
+        title: "El càlcul de combustible",
+        description: `El robot necessita calcular el combustible per escapar i arribar a la porta.
 
-robot.say(f"D'aquí {anys_fins} anys tindré {doble} anys")`,
-        solution: (output, robotActions) =>
-          robotActions.some(a => a.type === "say"),
-        robotActions: ["say"],
-        hint: "anys_fins = doble - edat"
+1. Crea \`distancia\` = 4 (cel·les fins a la porta)
+2. Crea \`consum\` = 2 (unitats per cel·la)
+3. Calcula \`combustible = distancia * consum\`
+4. Fes que el robot digui el resultat i arribi a la porta
+
+⚠️ Hi ha pedres al camí, has de rodejat-les!`,
+        starterCode: `# Calcula el combustible
+distancia = 
+consum = 
+combustible = 
+
+robot.print_robot(f"Combustible necessari: {combustible} unitats")
+
+# Navega fins a la porta (esquiva les pedres!)
+robot.dreta()
+robot.dreta()
+robot.avall()
+robot.dreta()
+robot.dreta()
+robot.amunt()`,
+        grid: {
+          cols: 7, rows: 4,
+          robotStart: [1, 0],
+          rocks: [[1, 2], [1, 3]],
+          door: [1, 6]
+        },
+        solution: (output, actions) =>
+          actions.some(a => a.type === "say" &&
+            a.text.includes("8")) &&
+          actions.some(a => a.type === "door"),
+        hint: 'combustible = distancia * consum = 4 * 2 = 8'
       }
     ]
   },
+
+  // ════════════════════════════════════════════════════════
+  //  MÒDUL 2 — SENTÈNCIES CONDICIONALS
+  // ════════════════════════════════════════════════════════
   {
     id: "condicionals",
     title: "Sentències condicionals",
@@ -102,98 +203,174 @@ robot.say(f"D'aquí {anys_fins} anys tindré {doble} anys")`,
       content: `
 ## Sentències condicionals
 
-Permeten que el programa prengui **decisions**.
+Permeten que el programa prengui **decisions** segons una condició.
 
 \`\`\`python
 if condicio:
     # s'executa si és cert
 elif altra_condicio:
-    # s'executa si l'altra és cert
+    # s'executa si l'altra és certa
 else:
-    # s'executa si cap és cert
+    # s'executa si cap és certa
 \`\`\`
 
 ### Operadors de comparació:
-- \`==\` igual
-- \`!=\` diferent
-- \`>\` major que
-- \`<\` menor que
-- \`>=\` major o igual
-- \`<=\` menor o igual
+- \`==\` igual · \`!=\` diferent
+- \`>\` major · \`<\` menor
+- \`>=\` major o igual · \`<=\` menor o igual
 
 ### Operadors lògics:
-- \`and\` → les dues condicions han de ser certes
-- \`or\` → n'hi ha prou amb una
+- \`and\` → les dues han de ser certes
+- \`or\`  → n'hi ha prou amb una
 - \`not\` → nega la condició
+
+### Amb el robot:
+\`\`\`python
+if robot.pedra_davant():
+    robot.avall()   # esquiva per baix
+else:
+    robot.dreta()   # segueix recte
+\`\`\`
       `
     },
     challenges: [
+
+      // ── M2 · R1 ─────────────────────────────────────────
       {
         id: "cond_1",
-        title: "El robot semàfor",
-        description: `El robot ha de decidir si pot creuar.
-Crea una variable \`color\` amb "verd", "groc" o "vermell".
-- Si és "verd": \`robot.move("endavant")\` i \`robot.say("Puc creuar!")\`
-- Si és "groc": \`robot.say("Espera...")\`  
-- Si és "vermell": \`robot.say("Para!")\``,
-        starterCode: `color = "verd"  # prova canviant el color
+        title: "El semàfor de seguretat",
+        description: `El robot ha de decidir si pot avançar o no.
 
-if color == ___:
-    robot.move("endavant")
-    robot.say("Puc creuar!")
-elif color == ___:
-    robot.say("Espera...")
+Crea una variable \`acces\` amb el valor \`True\` o \`False\`.
+
+- Si \`acces\` és \`True\`:
+  → \`robot.print_robot("Accés concedit. Avançant.")\`
+  → \`robot.dreta()\` tres vegades fins a la porta
+- Si \`acces\` és \`False\`:
+  → \`robot.print_robot("Accés denegat. Sistema bloquejat.")\`
+
+Prova amb \`True\` primer per superar el repte.`,
+        hiddenCode: `
+# Variables del sistema disponibles per a l'alumne
+sistema = "ByteOS"
+versio_sistema = 11.4
+sector_actual = "ALPHA-7"
+
+# Funció d'utilitat disponible
+def info_sistema():
+    return f"{sistema} v{versio_sistema} · Sector {sector_actual}"
+`,
+        starterCode: `acces = True
+
+if acces:
+    robot.print_robot("Accés concedit. Avançant.")
+    robot.dreta()
+    robot.dreta()
+    robot.dreta()
 else:
-    robot.say("Para!")`,
-        solution: (output, robotActions) =>
-          robotActions.some(a => a.type === "say") &&
-          robotActions.some(a => a.type === "move" || a.text),
-        robotActions: ["say", "move"],
-        hint: "Utilitza == per comparar strings: color == \"verd\""
+    robot.print_robot("Accés denegat. Sistema bloquejat.")`,
+        grid: {
+          cols: 5, rows: 3,
+          robotStart: [1, 0],
+          rocks: [],
+          door: [1, 4]
+        },
+        solution: (output, actions) =>
+          actions.some(a => a.type === "say" &&
+            a.text.toLowerCase().includes("concedit")) &&
+          actions.some(a => a.type === "door"),
+        hint: 'if acces: → si acces és True, entra al bloc. Recorda la indentació!'
       },
+
+      // ── M2 · R2 ─────────────────────────────────────────
       {
         id: "cond_2",
-        title: "El classificador de notes",
-        description: `El robot és professor i ha de dir si has aprovat.
-Crea una variable \`nota\` entre 0 i 10.
-- \`nota >= 9\`: \`robot.say("Excel·lent! 🌟")\`
-- \`nota >= 5\`: \`robot.say("Aprovat! ✅")\`
-- Sinó: \`robot.say("Suspès ❌")\``,
-        starterCode: `nota = 7  # canvia la nota
+        title: "Esquiva intel·ligent",
+        description: `El corredor té una pedra! El robot ha de detectar-la i decidir el camí.
 
-if nota >= ___:
-    robot.say("Excel·lent! 🌟")
-elif ___:
-    robot.say("Aprovat! ✅")
+Usa \`robot.pedra_davant()\` per saber si hi ha obstacle:
+- Si hi ha pedra davant → baixa (\`robot.avall()\`), avança i puja
+- Si no hi ha pedra → avança directe
+
+El robot ha d'arribar a la porta de sortida.
+
+💡 Pista: necessitaràs diverses comprovacions encadenades.`,
+        starterCode: `# Primera comprovació
+if robot.pedra_davant():
+    robot.avall()
+    robot.dreta()
+    robot.dreta()
+    robot.amunt()
 else:
-    robot.say("Suspès ❌")`,
-        solution: (output, robotActions) =>
-          robotActions.some(a => a.type === "say"),
-        robotActions: ["say"],
-        hint: "elif nota >= 5:"
+    robot.dreta()
+
+# Segueix fins a la porta
+robot.dreta()
+robot.dreta()`,
+        grid: {
+          cols: 7, rows: 4,
+          robotStart: [1, 0],
+          rocks: [[1, 1], [1, 2]],
+          door: [1, 6]
+        },
+        solution: (output, actions) =>
+          actions.some(a => a.type === "door"),
+        hint: 'robot.pedra_davant() retorna True si hi ha pedra a la dreta del robot'
       },
+
+      // ── M2 · R3 ─────────────────────────────────────────
       {
         id: "cond_3",
-        title: "El robot porter",
-        description: `El robot guarda l'entrada. Només pot entrar qui tingui més de 18 anys I tingui invitació.
-Crea \`edat\` i \`te_invitacio\` (True/False).
-- Si les dues condicions: \`robot.move("obrir")\` i \`robot.say("Endavant!")\`
-- Sinó: \`robot.say("Ho sento, no pots passar")\``,
-        starterCode: `edat = 20
-te_invitacio = True
+        title: "El laberint de decisions",
+        description: `El robot és en un laberint i ha de triar el camí correcte a cada cruïlla.
 
-if ___ and ___:
-    robot.move("obrir")
-    robot.say("Endavant!")
+Usa les funcions de detecció:
+- \`robot.pedra_davant()\` → pedra a la dreta
+- \`robot.pedra_amunt()\`  → pedra a dalt
+- \`robot.pedra_avall()\`  → pedra a baix
+
+A cada pas, comprova i decideix. El robot ha de parlar quan trobi la porta:
+\`robot.print_robot("Sortida trobada!")\``,
+        starterCode: `# Pas 1: comprova i mou
+if robot.pedra_davant():
+    robot.avall()
 else:
-    robot.say("Ho sento, no pots passar")`,
-        solution: (output, robotActions) =>
-          robotActions.some(a => a.type === "say"),
-        robotActions: ["say", "move"],
-        hint: "if edat >= 18 and te_invitacio:"
+    robot.dreta()
+
+# Pas 2
+if robot.pedra_davant():
+    robot.amunt()
+else:
+    robot.dreta()
+
+# Pas 3
+if robot.pedra_davant():
+    robot.amunt()
+else:
+    robot.dreta()
+
+# Pas 4: continua fins a la porta
+robot.dreta()
+robot.dreta()
+
+robot.print_robot("Sortida trobada!")`,
+        grid: {
+          cols: 7, rows: 5,
+          robotStart: [2, 0],
+          rocks: [[2, 1], [0, 2], [1, 2], [3, 2], [4, 2], [2, 4], [2, 5]],
+          door: [1, 6]
+        },
+        solution: (output, actions) =>
+          actions.some(a => a.type === "door") &&
+          actions.some(a => a.type === "say"),
+        hint: 'Simula pas a pas: on és el robot? Quines pedres té al voltant?'
       }
     ]
   },
+
+  // ════════════════════════════════════════════════════════
+  //  MÒDUL 3 — SENTÈNCIES ITERATIVES
+  // ════════════════════════════════════════════════════════
   {
     id: "iteratives",
     title: "Sentències iteratives",
@@ -203,87 +380,169 @@ else:
       content: `
 ## Sentències iteratives (bucles)
 
-Permeten repetir codi múltiples vegades.
+Permeten **repetir** instruccions sense escriure-les múltiples vegades.
 
 ### Bucle \`for\`:
 \`\`\`python
-for i in range(5):      # repeteix 5 vegades (0,1,2,3,4)
-    print(i)
+for i in range(5):       # repeteix 5 vegades (i = 0,1,2,3,4)
+    robot.dreta()
 
-for element in llista:  # recorre una llista
-    print(element)
+for i in range(3):
+    robot.print_robot(f"Pas {i+1}")
 \`\`\`
 
 ### Bucle \`while\`:
 \`\`\`python
+while not robot.pedra_davant():
+    robot.dreta()        # avança mentre no hi hagi pedra
+
 comptador = 0
 while comptador < 5:
-    print(comptador)
-    comptador += 1      # important! si no, bucle infinit
+    robot.dreta()
+    comptador += 1
 \`\`\`
 
-### Control de bucles:
-- \`break\` → surt del bucle
+### Control de flux:
+- \`break\`    → surt del bucle immediatament
 - \`continue\` → salta a la següent iteració
       `
     },
     challenges: [
+
+      // ── M3 · R1 ─────────────────────────────────────────
       {
         id: "iter_1",
-        title: "El robot ballarí",
-        description: `Fes que el robot balli 4 vegades seguides!
-Utilitza un bucle \`for\` per fer que el robot faci \`robot.move("ballar")\` 4 vegades.
-Al final: \`robot.say(f"He ballat {vegades} vegades!")\``,
-        starterCode: `vegades = 0
+        title: "El corredor infinit",
+        description: `El robot ha de recórrer tot el corredor fins a la porta sense saber exactament quants passos té.
 
-for i in range(___):
-    robot.move("ballar")
-    vegades += 1
+Usa un bucle \`while\` amb \`robot.pedra_davant()\` per detectar quan ha arribat a la paret/porta:
 
-robot.say(f"He ballat {vegades} vegades!")`,
-        solution: (output, robotActions) =>
-          robotActions.filter(a => a.type === "move").length >= 4,
-        robotActions: ["move", "say"],
-        hint: "range(4) genera els números 0, 1, 2, 3"
+\`\`\`python
+while not robot.pedra_davant():
+    robot.dreta()
+\`\`\`
+
+Quan surti del bucle, fes que el robot digui quants passos ha fet i arriba a la porta.`,
+        starterCode: `passos = 0
+
+while not robot.pedra_davant():
+    robot.dreta()
+    passos += 1
+
+robot.print_robot(f"He fet {passos} passos!")`,
+        grid: {
+          cols: 8, rows: 3,
+          robotStart: [1, 0],
+          rocks: [],
+          door: [1, 7]
+        },
+        solution: (output, actions) =>
+          actions.filter(a => a.type === "move").length >= 6 &&
+          actions.some(a => a.type === "say") &&
+          actions.some(a => a.type === "door"),
+        hint: 'while not robot.pedra_davant() → continua mentre NO hi hagi pedra davant'
       },
+
+      // ── M3 · R2 ─────────────────────────────────────────
       {
         id: "iter_2",
-        title: "Compte enrere!",
-        description: `El robot ha de fer un compte enrere del 5 al 1 i després dir "¡Llançament!".
-Utilitza un bucle \`while\` amb una variable \`comptador = 5\`.
-Cada iteració: \`robot.say(str(comptador))\` i redueix el comptador.`,
-        starterCode: `comptador = 5
+        title: "El serpentí",
+        description: `El robot ha de recórrer el mapa en forma de serpentí (com una S) per arribar a la porta.
 
-while comptador > ___:
-    robot.say(str(comptador))
-    comptador -= ___
+Usa \`for\` i \`range()\` per repetir els moviments:
+- 3 passos a la dreta
+- 1 pas avall
+- 3 passos a l'esquerra  
+- 1 pas avall
+- Continua fins a la porta
 
-robot.say("¡Llançament! 🚀")`,
-        solution: (output, robotActions) =>
-          robotActions.filter(a => a.type === "say").length >= 6,
-        robotActions: ["say"],
-        hint: "comptador -= 1 redueix el comptador en 1 cada vegada"
+El robot ha de dir quantes files ha recorregut.`,
+        starterCode: `files = 0
+
+# Fila 0: vés a la dreta
+for i in range(3):
+    robot.dreta()
+
+robot.avall()
+files += 1
+
+# Fila 1: vés a l'esquerra
+for i in range(3):
+    robot.esquerra()
+
+robot.avall()
+files += 1
+
+# Fila 2: vés a la dreta fins a la porta
+for i in range(3):
+    robot.dreta()
+
+robot.print_robot(f"He recorregut {files} files!")`,
+        grid: {
+          cols: 5, rows: 5,
+          robotStart: [0, 0],
+          rocks: [[1, 4], [3, 0]],
+          door: [2, 4]
+        },
+        solution: (output, actions) =>
+          actions.some(a => a.type === "door") &&
+          actions.some(a => a.type === "say"),
+        hint: 'Pensa en el recorregut: → ↓ ← ↓ → fins arribar a la porta'
       },
+
+      // ── M3 · R3 ─────────────────────────────────────────
       {
         id: "iter_3",
-        title: "El robot explorador",
-        description: `El robot ha d'explorar una llista de llocs i moure's a cadascun.
-Crea una llista \`llocs = ["nord", "sud", "est", "oest"]\`
-Recorre-la amb un \`for\` i fes \`robot.move(lloc)\` per a cada un.
-Al final: \`robot.say("Exploració completada!")\``,
-        starterCode: `llocs = ["nord", "sud", "est", "oest"]
+        title: "El laberint automàtic",
+        description: `El robot ha de navegar un laberint complex de forma automàtica.
 
-for ___ in llocs:
-    robot.move(___)
+Usa un bucle \`for i in range(20)\` i dins comprova cada direcció:
 
-robot.say("Exploració completada!")`,
-        solution: (output, robotActions) =>
-          robotActions.filter(a => a.type === "move").length >= 4,
-        robotActions: ["move", "say"],
-        hint: "for lloc in llocs: — la variable 'lloc' agafa cada valor de la llista"
+\`\`\`python
+for i in range(20):
+    if not robot.pedra_davant():
+        robot.dreta()
+    elif not robot.pedra_avall():
+        robot.avall()
+    elif not robot.pedra_amunt():
+        robot.amunt()
+\`\`\`
+
+Quan arribi a la porta, el robot ha de dir: \`"Laberint superat en {i+1} iteracions!"\`
+
+⚠️ Pista: potser cal ajustar l'ordre de preferència de direccions!`,
+        starterCode: `for i in range(20):
+    if not robot.pedra_davant():
+        robot.dreta()
+    elif not robot.pedra_avall():
+        robot.avall()
+    elif not robot.pedra_amunt():
+        robot.amunt()
+    else:
+        robot.esquerra()
+
+robot.print_robot("Laberint superat!")`,
+        grid: {
+          cols: 8, rows: 6,
+          robotStart: [0, 0],
+          rocks: [
+            [0, 2], [1, 0], [1, 1], [1, 3], [1, 4],
+            [2, 4], [3, 2], [3, 3], [3, 5], [4, 1],
+            [4, 5], [5, 3], [5, 4], [2, 6], [4, 6]
+          ],
+          door: [0, 7]
+        },
+        solution: (output, actions) =>
+          actions.some(a => a.type === "door") &&
+          actions.some(a => a.type === "say"),
+        hint: "L'ordre de les condicions importa. Prova: dreta → amunt → avall"
       }
     ]
   },
+
+  // ════════════════════════════════════════════════════════
+  //  MÒDUL 4 — FUNCIONS
+  // ════════════════════════════════════════════════════════
   {
     id: "funcions",
     title: "Funcions",
@@ -296,76 +555,161 @@ robot.say("Exploració completada!")`,
 Les funcions permeten **reutilitzar codi** donant-li un nom.
 
 \`\`\`python
-def saluda(nom):           # definició
-    print(f"Hola, {nom}!")
+def saluda(nom):           # definició amb paràmetre
+    robot.print_robot(f"Hola, {nom}!")
 
-saluda("Anna")             # crida
+saluda("Anna")             # crida → "Hola, Anna!"
 saluda("Bernat")           # reutilització
 \`\`\`
 
 ### Funcions amb retorn:
 \`\`\`python
-def suma(a, b):
-    return a + b
+def distancia_porta(passos):
+    return passos * 2
 
-resultat = suma(3, 4)      # resultat = 7
+total = distancia_porta(3)   # total = 6
 \`\`\`
 
-### Bones pràctiques:
-- Nom descriptiu en minúscules amb _
-- Una funció = una responsabilitat
-- Documenta amb comentaris
+### Funcions de moviment:
+\`\`\`python
+def anar_dreta(n):
+    for i in range(n):
+        robot.dreta()
+
+def esquivar():
+    if robot.pedra_davant():
+        robot.avall()
+        robot.dreta()
+        robot.amunt()
+    else:
+        robot.dreta()
+\`\`\`
       `
     },
     challenges: [
+
+      // ── M4 · R1 ─────────────────────────────────────────
       {
         id: "func_1",
-        title: "La funció de salutació",
-        description: `Crea una funció \`saludar(nom)\` que faci que el robot digui "Hola, [nom]!".
-Crida-la 3 vegades amb noms diferents.`,
-        starterCode: `def saludar(nom):
-    robot.say(___)
+        title: "El protocol de comunicació",
+        description: `El robot necessita un protocol estàndard per comunicar-se.
 
-saludar("Anna")
-saludar("Bernat")
-saludar("Carla")`,
-        solution: (output, robotActions) =>
-          robotActions.filter(a => a.type === "say").length >= 3,
-        robotActions: ["say"],
-        hint: "robot.say(f\"Hola, {nom}!\")"
+Crea una funció \`comunicar(missatge, prioritat)\` que:
+- Si \`prioritat == "alta"\`: digui \`"[URGENT] {missatge}"\`
+- Si no: digui \`"[INFO] {missatge}"\`
+
+Crida-la almenys 3 vegades amb missatges diferents.
+Un d'ells ha de ser d'alta prioritat amb la paraula "porta".`,
+        starterCode: `def comunicar(missatge, prioritat):
+    if prioritat == "alta":
+        robot.print_robot(f"[URGENT] {missatge}")
+    else:
+        robot.print_robot(f"[INFO] {missatge}")
+
+# Crida la funció 3 vegades
+comunicar("Sistema inicialitzat", "baixa")
+comunicar("Porta detectada", "alta")
+comunicar("Explorant sector", "baixa")`,
+        grid: {
+          cols: 5, rows: 4,
+          robotStart: [1, 0],
+          rocks: [],
+          door: null
+        },
+        solution: (output, actions) => {
+          const says = actions.filter(a => a.type === "say");
+          return says.length >= 3 &&
+            says.some(a => a.text.includes("[URGENT]") &&
+              a.text.toLowerCase().includes("porta"));
+        },
+        hint: 'if prioritat == "alta": — recorda les cometes al comparar textos'
       },
+
+      // ── M4 · R2 ─────────────────────────────────────────
       {
         id: "func_2",
-        title: "El robot calculador",
-        description: `Crea una funció \`calcular_area(amplada, altura)\` que retorni l'àrea.
-Crida-la i fes que el robot digui el resultat:
-\`robot.say(f"L'àrea és {area}")\``,
-        starterCode: `def calcular_area(amplada, altura):
-    return ___
+        title: "El pilot automàtic",
+        description: `Crea un sistema de pilot automàtic amb funcions reutilitzables.
 
-area = calcular_area(5, 3)
-robot.say(f"L'àrea és {area}")`,
-        solution: (output, robotActions) =>
-          robotActions.some(a => a.type === "say" && a.text.includes("15")),
-        robotActions: ["say"],
-        hint: "return amplada * altura"
+Defineix:
+- \`anar_dreta(n)\` → mou el robot \`n\` vegades a la dreta
+- \`anar_avall(n)\` → mou el robot \`n\` vegades avall
+
+Usa-les per navegar el mapa en forma de L i arribar a la porta.
+El robot ha d'anunciar cada maniobra amb \`robot.print_robot()\`.`,
+        starterCode: `def anar_dreta(n):
+    robot.print_robot(f"Maniobra: {n} passos a la dreta")
+    for i in range(n):
+        robot.dreta()
+
+def anar_avall(n):
+    robot.print_robot(f"Maniobra: {n} passos avall")
+    for i in range(n):
+        robot.avall()
+
+# Navega fins a la porta en forma de L
+anar_dreta(3)
+anar_avall(2)
+anar_dreta(3)`,
+        grid: {
+          cols: 8, rows: 5,
+          robotStart: [0, 0],
+          rocks: [[0, 4], [0, 5], [0, 6], [1, 4], [2, 0], [2, 1], [2, 2]],
+          door: [2, 6]
+        },
+        solution: (output, actions) =>
+          actions.some(a => a.type === "door") &&
+          actions.filter(a => a.type === "say").length >= 2,
+        hint: "Segueix el camí en L: dreta, avall, dreta. Quants passos a cada tram?"
       },
+
+      // ── M4 · R3 ─────────────────────────────────────────
       {
         id: "func_3",
-        title: "El robot ballarí intel·ligent",
-        description: `Crea una funció \`ballar(vegades)\` que faci moure el robot \`vegades\` cops i al final digui quantes vegades ha ballat.
-Crida-la amb 3 i amb 5.`,
-        starterCode: `def ballar(vegades):
-    for i in range(___):
-        robot.move("ballar")
-    robot.say(f"He ballat {vegades} vegades!")
+        title: "El robot explorador autònom",
+        description: `Crea un robot completament autònom que explori i surti del laberint.
 
-ballar(___)
-ballar(___)`,
-        solution: (output, robotActions) =>
-          robotActions.filter(a => a.type === "move").length >= 8,
-        robotActions: ["move", "say"],
-        hint: "Crida ballar(3) i ballar(5) → en total 8 moviments"
+Implementa:
+- \`esquivar()\` → comprova \`pedra_davant()\` i decideix cap on anar
+- \`explorar(max_passos)\` → crida \`esquivar()\` en bucle fins arribar o esgotar passos
+- El robot ha de dir quants passos ha necessitat per sortir
+
+Aquest és el repte final. Necessites tot el que has après!`,
+        starterCode: `def esquivar():
+    if not robot.pedra_davant():
+        robot.dreta()
+    elif not robot.pedra_amunt():
+        robot.amunt()
+        robot.dreta()
+        robot.avall()
+    elif not robot.pedra_avall():
+        robot.avall()
+        robot.dreta()
+        robot.amunt()
+    else:
+        robot.esquerra()
+
+def explorar(max_passos):
+    for i in range(max_passos):
+        esquivar()
+    robot.print_robot(f"Exploració completada en {max_passos} passos!")
+
+explorar(15)`,
+        grid: {
+          cols: 9, rows: 6,
+          robotStart: [2, 0],
+          rocks: [
+            [0, 1], [1, 1], [3, 1], [4, 1],
+            [2, 3], [0, 3], [1, 3], [4, 3], [5, 3],
+            [2, 5], [3, 5], [1, 6], [4, 6],
+            [0, 7], [5, 7]
+          ],
+          door: [2, 8]
+        },
+        solution: (output, actions) =>
+          actions.some(a => a.type === "door") &&
+          actions.some(a => a.type === "say"),
+        hint: "La funció esquivar() ha de gestionar tots els casos. Prova ordre: dreta → amunt → avall → esquerra"
       }
     ]
   }

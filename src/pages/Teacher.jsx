@@ -1,142 +1,229 @@
 import { useState, useEffect } from "react";
-import { collection, getDocs, query, where } from "firebase/firestore";
-import { db } from "../firebase";
-import { BLOCKS } from "../data/curriculum";
+import { collection, getDocs, addDoc, query, where, serverTimestamp } from "firebase/firestore";
+import { db, auth } from "../firebase";
 import { signOut } from "firebase/auth";
-import { auth } from "../firebase";
+import { useNavigate } from "react-router-dom";
+import { BLOCKS } from "../data/curriculum";
 
-export default function Teacher({ userData }) {
-  const [alumnes, setAlumnes] = useState([]);
-  const [selected, setSelected] = useState(null);
-  const [filterGrup, setFilterGrup] = useState("");
+const C = "#00ffb4"; const BG2 = "#020810";
+const MONO = "'Share Tech Mono', monospace"; const ORB = "'Orbitron', monospace";
 
-  useEffect(() => {
-    const load = async () => {
-      const q = query(collection(db, "users"), where("rol", "==", "alumne"));
-      const snap = await getDocs(q);
-      setAlumnes(snap.docs.map(d => ({ id: d.id, ...d.data() })));
-    };
-    load();
-  }, []);
+export default function Teacher({ userData, user }) {
+  const navigate = useNavigate();
+  const [groups, setGroups] = useState([]);
+  const [groupStats, setGroupStats] = useState({});
+  const [showModal, setShowModal] = useState(false);
+  const [newGrup, setNewGrup] = useState("");
+  const [newCurs, setNewCurs] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const grups = [...new Set(alumnes.map(a => a.grup).filter(Boolean))];
+  const totalChallenges = BLOCKS.reduce((a, b) => a + b.challenges.length, 0);
 
-  const filtrats = filterGrup ? alumnes.filter(a => a.grup === filterGrup) : alumnes;
+  const loadGroups = async () => {
+    // Carrega grups creats per aquest professor
+    const q = query(collection(db, "groups"), where("teacherId", "==", user.uid));
+    const snap = await getDocs(q);
+    const grps = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    setGroups(grps);
 
-  const getTotalProgress = (alumne) => {
-    let total = 0, completed = 0;
-    for (const block of BLOCKS) {
-      for (const ch of block.challenges) {
-        total++;
-        if (alumne.progress?.[block.id]?.[ch.id]) completed++;
-      }
+    // Per cada grup, carrega alumnes i calcula estadístiques
+    const stats = {};
+    for (const grp of grps) {
+      const aq = query(collection(db, "users"),
+        where("rol", "==", "alumne"),
+        where("grup", "==", grp.nom));
+      const aSnap = await getDocs(aq);
+      const alumnes = aSnap.docs.map(d => d.data());
+
+      const totalExecs = alumnes.reduce((acc, a) =>
+        acc + Object.values(a.executionCount || {}).reduce((s, n) => s + n, 0), 0);
+
+      const totalDone = alumnes.reduce((acc, a) => {
+        let done = 0;
+        for (const b of BLOCKS)
+          for (const ch of b.challenges)
+            if (a.progress?.[b.id]?.[ch.id]) done++;
+        return acc + done;
+      }, 0);
+
+      const pct = alumnes.length > 0
+        ? Math.round((totalDone / (alumnes.length * totalChallenges)) * 100) : 0;
+
+      stats[grp.id] = { alumnes: alumnes.length, pct, executions: totalExecs };
     }
-    return { completed, total };
+    setGroupStats(stats);
   };
 
-  const getTotalExecutions = (alumne) => {
-    return Object.values(alumne.executionCount || {}).reduce((a, b) => a + b, 0);
+  useEffect(() => { loadGroups(); }, []);
+
+  const createGroup = async () => {
+    if (!newGrup.trim()) return;
+    setLoading(true);
+    await addDoc(collection(db, "groups"), {
+      nom: newGrup.trim().toUpperCase(),
+      curs: newCurs.trim(),
+      teacherId: user.uid,
+      teacherNom: userData.nom,
+      createdAt: serverTimestamp()
+    });
+    setNewGrup(""); setNewCurs("");
+    setShowModal(false);
+    await loadGroups();
+    setLoading(false);
   };
+
+  const globalPct = groups.length > 0
+    ? Math.round(Object.values(groupStats).reduce((a, s) => a + s.pct, 0) / groups.length) : 0;
+  const totalAlumnes = Object.values(groupStats).reduce((a, s) => a + s.alumnes, 0);
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white shadow-sm px-6 py-4 flex justify-between items-center">
-        <div className="flex items-center gap-3">
-          <span className="text-3xl">👨‍🏫</span>
+    <>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600&display=swap');
+        @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+        .cy-cursor{display:inline-block;width:6px;height:12px;background:#00ffb4;animation:blink 1s step-end infinite;vertical-align:middle;margin-left:2px}
+        .t-group-card{background:rgba(2,8,16,.92);border:1px solid rgba(0,255,180,.18);position:relative;overflow:hidden;transition:border-color .2s;cursor:pointer}
+        .t-group-card:hover{border-color:rgba(0,255,180,.5)!important}
+        .t-modal-input:focus{border-color:#00ffb4!important;background:rgba(0,255,180,.07)!important}
+        .t-modal-input::placeholder{color:rgba(0,255,180,.2)}
+      `}</style>
+
+      <div style={{ background: "#050d1a", minHeight: "100vh", fontFamily: "'Rajdhani',sans-serif", color: C, position: "relative" }}>
+        <div style={{ position: "fixed", inset: 0, pointerEvents: "none", backgroundImage: `linear-gradient(rgba(0,255,180,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,180,.025) 1px,transparent 1px)`, backgroundSize: "40px 40px" }} />
+
+        {/* HEADER */}
+        <header style={{ background: BG2, borderBottom: `1px solid rgba(0,255,180,.2)`, padding: "12px 28px", display: "flex", alignItems: "center", justifyContent: "space-between", position: "relative", zIndex: 1 }}>
           <div>
-            <h1 className="font-bold text-gray-800">Panel del Professor</h1>
-            <p className="text-sm text-gray-500">{userData?.nom}</p>
+            <div style={{ fontFamily: MONO, fontSize: 9, color: "rgba(0,255,180,.4)", letterSpacing: ".18em" }}>// PANEL DE COMANDAMENT</div>
+            <div style={{ fontFamily: ORB, fontSize: 20, fontWeight: 900, color: "#e8f4ff" }}>CODE<span style={{ color: C }}>QUEST</span></div>
           </div>
-        </div>
-        <button onClick={() => signOut(auth)} className="text-gray-500 hover:text-red-500 text-sm">Sortir</button>
-      </header>
-
-      <main className="max-w-6xl mx-auto px-6 py-8">
-        {/* Filtres */}
-        <div className="flex gap-4 mb-6">
-          <select className="border rounded-lg px-4 py-2 bg-white"
-            value={filterGrup} onChange={e => setFilterGrup(e.target.value)}>
-            <option value="">Tots els grups</option>
-            {grups.map(g => <option key={g} value={g}>{g}</option>)}
-          </select>
-          <div className="bg-blue-50 text-blue-700 px-4 py-2 rounded-lg text-sm font-medium">
-            {filtrats.length} alumnes
+          <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+            <div style={{ fontFamily: MONO, fontSize: 10, color: "rgba(0,255,180,.4)", letterSpacing: ".1em", border: `1px solid rgba(0,255,180,.2)`, padding: "4px 10px" }}>
+              👨‍🏫 COMANDANT · {userData?.nom?.toUpperCase()}
+            </div>
+            <button onClick={() => signOut(auth)} style={{ fontFamily: MONO, fontSize: 10, color: "rgba(0,255,180,.35)", background: "none", border: `1px solid rgba(0,255,180,.15)`, padding: "4px 10px", cursor: "pointer", letterSpacing: ".08em" }}>
+              DESCONNECTAR
+            </button>
           </div>
-        </div>
+        </header>
 
-        <div className="flex gap-6">
-          {/* Llista alumnes */}
-          <div className="w-1/3 space-y-3">
-            {filtrats.map(alumne => {
-              const { completed, total } = getTotalProgress(alumne);
-              const execs = getTotalExecutions(alumne);
+        <main style={{ position: "relative", zIndex: 1, padding: "28px" }}>
+          <div style={{ fontFamily: MONO, fontSize: 10, color: "rgba(0,255,180,.4)", letterSpacing: ".18em", marginBottom: 4 }}>// VISIÓ GLOBAL DEL SISTEMA</div>
+          <div style={{ fontFamily: ORB, fontSize: 22, fontWeight: 700, color: "#e8f4ff", marginBottom: 18 }}>
+            CENTRE DE CONTROL <span className="cy-cursor" />
+          </div>
+
+          {/* Stats globals */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 10, marginBottom: 28 }}>
+            {[
+              { val: groups.length, label: "GRUPS ACTIUS" },
+              { val: totalAlumnes, label: "AGENTS TOTALS" },
+              { val: `${globalPct}%`, label: "ASSOLIMENT GLOBAL" },
+            ].map(({ val, label }) => (
+              <div key={label} style={{ background: "rgba(2,8,16,.9)", border: `1px solid rgba(0,255,180,.15)`, padding: "14px 18px", position: "relative" }}>
+                <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 1, background: "linear-gradient(90deg,#00ffb4,transparent)", opacity: .5 }} />
+                <div style={{ fontFamily: ORB, fontSize: 26, fontWeight: 900, color: C }}>{val}</div>
+                <div style={{ fontFamily: MONO, fontSize: 10, color: "rgba(0,255,180,.4)", letterSpacing: ".1em", marginTop: 2 }}>{label}</div>
+              </div>
+            ))}
+          </div>
+
+          {/* Capçalera grups */}
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
+            <div style={{ fontFamily: ORB, fontSize: 13, color: "#e8f4ff", letterSpacing: ".08em" }}>// GRUPS D'AGENTS</div>
+            <button onClick={() => setShowModal(true)} style={{ background: C, color: "#020c1b", fontFamily: ORB, fontSize: 10, fontWeight: 700, letterSpacing: ".14em", border: "none", padding: "9px 16px", cursor: "pointer" }}>
+              + CREAR NOU GRUP
+            </button>
+          </div>
+
+          {/* Grid de grups */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(2,1fr)", gap: 12 }}>
+            {groups.map(grp => {
+              const st = groupStats[grp.id] || { alumnes: 0, pct: 0, executions: 0 };
               return (
-                <div key={alumne.id}
-                  onClick={() => setSelected(alumne)}
-                  className={`bg-white rounded-xl p-4 shadow-sm cursor-pointer border-2 transition ${selected?.id === alumne.id ? "border-blue-500" : "border-transparent hover:border-gray-200"}`}>
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <p className="font-medium text-gray-800">{alumne.nom}</p>
-                      <p className="text-xs text-gray-500">{alumne.grup} · {alumne.email}</p>
+                <div key={grp.id} className="t-group-card" onClick={() => navigate(`/teacher/group/${grp.id}`)}>
+                  <div style={{ height: 2, background: `linear-gradient(90deg,${C},transparent)` }} />
+                  <div style={{ padding: "16px 18px" }}>
+                    <div style={{ fontFamily: MONO, fontSize: 9, color: "rgba(0,255,180,.4)", letterSpacing: ".15em", marginBottom: 6 }}>
+                      // GRUP ACTIU · {grp.curs || "2025-26"}
                     </div>
-                    <span className="text-xs bg-gray-100 px-2 py-1 rounded">{execs} exec.</span>
-                  </div>
-                  <div className="mt-2">
-                    <div className="flex justify-between text-xs text-gray-500 mb-1">
-                      <span>Progrés</span>
-                      <span>{completed}/{total}</span>
+                    <div style={{ fontFamily: ORB, fontSize: 18, fontWeight: 700, color: "#e8f4ff", letterSpacing: ".06em", marginBottom: 12 }}>
+                      {grp.nom}
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-1.5">
-                      <div className="bg-blue-500 h-1.5 rounded-full" style={{ width: `${(completed / total) * 100}%` }} />
+                    <div style={{ display: "flex", gap: 20, marginBottom: 12 }}>
+                      {[
+                        { v: st.alumnes, l: "AGENTS" },
+                        { v: `${st.pct}%`, l: "ASSOLIMENT" },
+                        { v: st.executions, l: "EXECUCIONS" },
+                      ].map(({ v, l }) => (
+                        <div key={l}>
+                          <div style={{ fontFamily: ORB, fontSize: 18, fontWeight: 700, color: C }}>{v}</div>
+                          <div style={{ fontFamily: MONO, fontSize: 9, color: "rgba(0,255,180,.35)", letterSpacing: ".1em" }}>{l}</div>
+                        </div>
+                      ))}
+                    </div>
+                    <div style={{ height: 3, background: "rgba(0,255,180,.1)", marginBottom: 10 }}>
+                      <div style={{ height: "100%", background: C, width: `${st.pct}%`, transition: "width .6s" }} />
+                    </div>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                      <span style={{ fontFamily: MONO, fontSize: 10, color: C, border: `1px solid rgba(0,255,180,.3)`, padding: "3px 10px" }}>
+                        VEURE DETALL →
+                      </span>
+                      <span style={{ fontFamily: MONO, fontSize: 10, color: "rgba(0,255,180,.4)" }}>
+                        {st.alumnes} agents registrats
+                      </span>
                     </div>
                   </div>
                 </div>
               );
             })}
+
+            {/* Card placeholder */}
+            <div onClick={() => setShowModal(true)} style={{
+              background: "rgba(2,8,16,.5)", border: `1px dashed rgba(0,255,180,.15)`,
+              display: "flex", alignItems: "center", justifyContent: "center",
+              minHeight: 160, cursor: "pointer", transition: "border-color .2s"
+            }}
+              onMouseEnter={e => e.currentTarget.style.borderColor = "rgba(0,255,180,.35)"}
+              onMouseLeave={e => e.currentTarget.style.borderColor = "rgba(0,255,180,.15)"}>
+              <div style={{ textAlign: "center" }}>
+                <div style={{ fontFamily: ORB, fontSize: 32, color: "rgba(0,255,180,.25)", marginBottom: 8 }}>+</div>
+                <div style={{ fontFamily: MONO, fontSize: 10, color: "rgba(0,255,180,.3)", letterSpacing: ".12em" }}>CREAR NOU GRUP</div>
+              </div>
+            </div>
           </div>
+        </main>
 
-          {/* Detall alumne */}
-          {selected ? (
-            <div className="flex-1 bg-white rounded-2xl shadow-md p-6">
-              <h2 className="text-xl font-bold text-gray-800 mb-1">{selected.nom}</h2>
-              <p className="text-gray-500 text-sm mb-6">{selected.email} · {selected.grup}</p>
-
-              {BLOCKS.map(block => (
-                <div key={block.id} className="mb-6">
-                  <h3 className="font-semibold text-gray-700 mb-3">{block.icon} {block.title}</h3>
-                  <div className="grid grid-cols-3 gap-3">
-                    {block.challenges.map(ch => {
-                      const done = selected.progress?.[block.id]?.[ch.id];
-                      const execs = selected.executionCount?.[ch.id] || 0;
-                      const history = selected.executions?.[ch.id] || [];
-                      const lastExec = history[history.length - 1];
-                      return (
-                        <div key={ch.id} className={`rounded-lg p-3 border ${done ? "bg-green-50 border-green-200" : "bg-gray-50 border-gray-200"}`}>
-                          <p className="text-sm font-medium text-gray-700">{ch.title}</p>
-                          <p className="text-xs text-gray-500 mt-1">{execs} execucions</p>
-                          {done && <span className="text-xs text-green-600 font-medium">✅ Completat</span>}
-                          {lastExec && (
-                            <details className="mt-2">
-                              <summary className="text-xs text-blue-500 cursor-pointer">Veure últim intent</summary>
-                              <pre className="text-xs bg-gray-800 text-green-400 p-2 rounded mt-1 overflow-auto max-h-24">
-                                {lastExec.code}
-                              </pre>
-                            </details>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              ))}
+        {/* MODAL crear grup */}
+        {showModal && (
+          <div style={{ position: "fixed", inset: 0, background: "rgba(2,8,16,.92)", zIndex: 50, display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <div style={{ width: 380, background: BG2, border: `1px solid rgba(0,255,180,.3)`, padding: 28, position: "relative" }}>
+              <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 2, background: C }} />
+              <div style={{ fontFamily: ORB, fontSize: 14, fontWeight: 700, color: "#e8f4ff", letterSpacing: ".08em", marginBottom: 20 }}>
+                // CREAR NOU GRUP D'AGENTS
+              </div>
+              <label style={{ fontFamily: MONO, fontSize: 10, color: "rgba(0,255,180,.45)", letterSpacing: ".12em", display: "block", marginBottom: 5 }}>NOM DEL GRUP</label>
+              <input className="t-modal-input"
+                value={newGrup} onChange={e => setNewGrup(e.target.value)}
+                placeholder="ex: DAW2A"
+                style={{ width: "100%", background: "rgba(0,255,180,.04)", border: `1px solid rgba(0,255,180,.2)`, color: "#e8f4ff", fontFamily: MONO, fontSize: 13, padding: "10px 12px", outline: "none", marginBottom: 14 }} />
+              <label style={{ fontFamily: MONO, fontSize: 10, color: "rgba(0,255,180,.45)", letterSpacing: ".12em", display: "block", marginBottom: 5 }}>CURS / DESCRIPCIÓ</label>
+              <input className="t-modal-input"
+                value={newCurs} onChange={e => setNewCurs(e.target.value)}
+                placeholder="ex: 2025-26"
+                style={{ width: "100%", background: "rgba(0,255,180,.04)", border: `1px solid rgba(0,255,180,.2)`, color: "#e8f4ff", fontFamily: MONO, fontSize: 13, padding: "10px 12px", outline: "none", marginBottom: 20 }} />
+              <div style={{ display: "flex", gap: 10 }}>
+                <button onClick={() => setShowModal(false)} style={{ flex: 1, background: "none", border: `1px solid rgba(0,255,180,.2)`, color: "rgba(0,255,180,.5)", fontFamily: MONO, fontSize: 10, padding: 11, cursor: "pointer", letterSpacing: ".08em" }}>
+                  CANCEL·LAR
+                </button>
+                <button onClick={createGroup} disabled={loading} style={{ flex: 1, background: C, color: "#020c1b", fontFamily: ORB, fontSize: 10, fontWeight: 700, letterSpacing: ".14em", border: "none", padding: 11, cursor: "pointer" }}>
+                  {loading ? "CREANT..." : "CREAR GRUP →"}
+                </button>
+              </div>
             </div>
-          ) : (
-            <div className="flex-1 flex items-center justify-center text-gray-400">
-              Selecciona un alumne per veure el detall
-            </div>
-          )}
-        </div>
-      </main>
-    </div>
+          </div>
+        )}
+      </div>
+    </>
   );
 }

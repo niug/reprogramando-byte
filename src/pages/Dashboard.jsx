@@ -50,44 +50,56 @@ export default function Dashboard({ userData, user }) {
         {/* HEADER */}
         <header style={{ background: BG2, borderBottom: `1px solid rgba(0,255,180,0.2)`, padding: "12px 28px", display: "flex", alignItems: "center", justifyContent: "space-between", position: "relative", zIndex: 1 }}>
           <div>
-            <div style={{ fontFamily: MONO, fontSize: 9, color: "rgba(0,255,180,0.4)", letterSpacing: ".18em" }}>// HUB D'OPERACIONS</div>
-            <div style={{ fontFamily: ORB, fontSize: 20, fontWeight: 900, color: "#e8f4ff", letterSpacing: ".06em" }}>
-              CODE<span style={{ color: C }}>QUEST</span>
+            <div style={{
+              fontFamily: ORB,
+              fontSize: 10,
+              fontWeight: 700,
+              color: C,
+              letterSpacing: ".18em",
+            }}>REPROGRAMANDO</div>
+            <div style={{
+              fontFamily: ORB,
+              fontSize: 18,
+              fontWeight: 900,
+              color: "#e8f4ff",
+              letterSpacing: ".06em",
+            }}>
+              BYTE
             </div>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
             <div style={{ textAlign: "right" }}>
-              <div style={{ fontFamily: MONO, fontSize: 9, color: "rgba(0,255,180,0.35)", letterSpacing: ".12em" }}>AGENT ACTIU</div>
+              <div style={{ fontFamily: MONO, fontSize: 9, color: "rgba(0,255,180,0.35)", letterSpacing: ".12em" }}>AGENTE ACTIVO</div>
               <div style={{ fontFamily: ORB, fontSize: 12, color: C, letterSpacing: ".1em" }}>
                 {(userData?.nom || "AGENT").toUpperCase().replace(" ", "_")}
               </div>
               {userData?.grup && (
-                <div style={{ fontFamily: MONO, fontSize: 10, color: "rgba(0,255,180,0.4)" }}>UNITAT: {userData.grup}</div>
+                <div style={{ fontFamily: MONO, fontSize: 10, color: "rgba(0,255,180,0.4)" }}>UNIDAD: {userData.grup}</div>
               )}
             </div>
             <button
               className="db-logout"
               onClick={() => signOut(auth)}
               style={{ fontFamily: MONO, fontSize: 10, color: "rgba(0,255,180,0.35)", background: "none", border: `1px solid rgba(0,255,180,0.15)`, padding: "5px 12px", cursor: "pointer", letterSpacing: ".08em" }}>
-              DESCONNECTAR
+              DESCONECTAR
             </button>
           </div>
         </header>
 
         {/* MAIN */}
         <main style={{ position: "relative", zIndex: 1, padding: "28px 28px 40px" }}>
-          <div style={{ fontFamily: MONO, fontSize: 10, color: "rgba(0,255,180,0.4)", letterSpacing: ".18em", marginBottom: 4 }}>// PANELL DE MISSIONS</div>
-          <div style={{ fontFamily: ORB, fontSize: 22, fontWeight: 700, color: "#e8f4ff", letterSpacing: ".04em", marginBottom: 4 }}>SELECCIONA EL TEU MÒDUL</div>
+          <div style={{ fontFamily: MONO, fontSize: 10, color: "rgba(0,255,180,0.4)", letterSpacing: ".18em", marginBottom: 4 }}>// PANEL DE MISIONES</div>
+          <div style={{ fontFamily: ORB, fontSize: 22, fontWeight: 700, color: "#e8f4ff", letterSpacing: ".04em", marginBottom: 4 }}>SELECCIONA TU MÓDULO</div>
           <div style={{ fontFamily: MONO, fontSize: 11, color: "rgba(0,255,180,0.35)", letterSpacing: ".08em", marginBottom: 24 }}>
-            COMPLETA ELS REPTES PER DESBLOQUEJAR EL SEGÜENT MÒDUL <span className="cy-cursor" />
+            COMPLETA LOS RETOS PARA DESBLOQUEAR EL SIGUIENTE MÓDULO <span className="cy-cursor" />
           </div>
 
           {/* Stats */}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 10, marginBottom: 28 }}>
             {[
-              { val: totalCompleted, label: "REPTES COMPLETATS" },
-              { val: totalChallenges, label: "TOTAL DE REPTES" },
-              { val: `${globalPct}%`, label: "PROGRÉS GLOBAL" },
+              { val: totalCompleted, label: "RETOS COMPLETADOS" },
+              { val: totalChallenges, label: "TOTAL DE RETOS" },
+              { val: `${globalPct}%`, label: "PROGRESO GLOBAL" },
             ].map(({ val, label }) => (
               <div key={label} style={{ background: "rgba(2,8,16,0.9)", border: `1px solid rgba(0,255,180,0.15)`, padding: "14px 18px", position: "relative" }}>
                 <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 1, background: "linear-gradient(90deg,#00ffb4,transparent)", opacity: .5 }} />
@@ -118,7 +130,7 @@ export default function Dashboard({ userData, user }) {
                   {/* Header */}
                   <div style={{ padding: "18px 20px 14px", borderBottom: `1px solid rgba(0,255,180,0.1)` }}>
                     <div style={{ fontFamily: MONO, fontSize: 9, color: "rgba(0,255,180,0.4)", letterSpacing: ".15em", marginBottom: 6 }}>
-                      // MÒDUL {String(idx + 1).padStart(2, "0")} · {isDone ? "COMPLETAT" : unlocked ? "DISPONIBLE" : "BLOQUEJAT"}
+                      // MÒDUL {String(idx + 1).padStart(2, "0")} · {isDone ? "COMPLETADO" : unlocked ? "DISPONIBLE" : "BLOQUEADO"}
                     </div>
                     <div style={{ fontFamily: ORB, fontSize: 13, fontWeight: 700, color: "#e8f4ff", letterSpacing: ".05em" }}>
                       {block.icon} {block.title.toUpperCase()}
@@ -128,7 +140,7 @@ export default function Dashboard({ userData, user }) {
                   {/* Body */}
                   <div style={{ padding: "14px 20px 18px" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 7 }}>
-                      <span style={{ fontFamily: MONO, fontSize: 10, color: "rgba(0,255,180,0.4)", letterSpacing: ".08em" }}>PROGRÉS</span>
+                      <span style={{ fontFamily: MONO, fontSize: 10, color: "rgba(0,255,180,0.4)", letterSpacing: ".08em" }}>PROGRESO</span>
                       <span style={{ fontFamily: MONO, fontSize: 11, color: C }}>{completed} / {total}</span>
                     </div>
                     <div style={{ height: 3, background: "rgba(0,255,180,0.1)", marginBottom: 14 }}>
@@ -140,15 +152,25 @@ export default function Dashboard({ userData, user }) {
                       {block.challenges.map((ch, ci) => {
                         const done = userData?.progress?.[block.id]?.[ch.id];
                         return (
-                          <div key={ci} style={{
-                            flex: 1, height: 28,
-                            border: `1px solid ${done ? C : unlocked ? "rgba(0,255,180,0.2)" : "rgba(0,255,180,0.1)"}`,
-                            borderStyle: unlocked ? "solid" : "dashed",
-                            background: done ? "rgba(0,255,180,0.12)" : "transparent",
-                            display: "flex", alignItems: "center", justifyContent: "center",
-                            fontFamily: MONO, fontSize: 10,
-                            color: done ? C : "rgba(0,255,180,0.3)"
-                          }}>
+                          <div key={ci} 
+                            onClick={() => {
+                              if (done || ci === completed) navigate(`/theory/${block.id}`);
+                            }}
+                            style={{
+                              flex: 1, height: 28,
+                              border: `1px solid ${done ? C : unlocked ? "rgba(0,255,180,.2)" : "rgba(0,255,180,.1)"}`,
+                              borderStyle: unlocked ? "solid" : "dashed",
+                              background: done ? "rgba(0,255,180,.12)" : "transparent",
+                              display: "flex", alignItems: "center", justifyContent: "center",
+                              fontFamily: MONO, fontSize: 10,
+                              color: done ? C : "rgba(0,255,180,.3)",
+                              cursor: (done || ci === completed) ? "pointer" : "not-allowed",
+                              transition: "background .15s, border-color .15s"
+                            }}
+                            onMouseEnter={e => { if (done) e.currentTarget.style.background = "rgba(0,255,180,.22)"; }}
+                            onMouseLeave={e => { if (done) e.currentTarget.style.background = "rgba(0,255,180,.12)"; }}
+                            title={done ? `Repetir P${ci + 1}` : ci === completed ? "Siguiente reto" : "Bloquejado"}
+                            >
                             {done ? `P${ci + 1} ✓` : `P${ci + 1}`}
                           </div>
                         );
@@ -158,18 +180,18 @@ export default function Dashboard({ userData, user }) {
                     {/* Botó */}
                     {!unlocked ? (
                       <button style={{ width: "100%", background: "transparent", border: `1px dashed rgba(0,255,180,0.15)`, color: "rgba(0,255,180,0.25)", fontFamily: ORB, fontSize: 10, fontWeight: 700, letterSpacing: ".14em", padding: 10, cursor: "not-allowed" }}>
-                        🔒 COMPLETA EL MÒDUL ANTERIOR
+                        🔒 COMPLETA EL MÓDUL ANTERIOR
                       </button>
                     ) : isDone ? (
                       <button style={{ width: "100%", background: "transparent", border: `1px solid rgba(0,255,180,0.3)`, color: "rgba(0,255,180,0.5)", fontFamily: ORB, fontSize: 10, fontWeight: 700, letterSpacing: ".14em", padding: 10, cursor: "default" }}>
-                        ✓ MÒDUL COMPLETAT
+                        ✓ MÓDULO COMPLETADO
                       </button>
                     ) : (
                       <button
                         className="db-btn-main"
                         onClick={() => navigate(`/theory/${block.id}`)}
                         style={{ width: "100%", background: C, color: "#020c1b", fontFamily: ORB, fontSize: 10, fontWeight: 700, letterSpacing: ".16em", border: "none", padding: 10, cursor: "pointer" }}>
-                        {completed === 0 ? "INICIAR MÒDUL →" : "CONTINUAR MÒDUL →"}
+                        {completed === 0 ? "INICIAR MÓDULO →" : "CONTINUAR MÓDULO →"}
                       </button>
                     )}
                   </div>
@@ -181,8 +203,8 @@ export default function Dashboard({ userData, user }) {
 
         {/* FOOTER */}
         <footer style={{ position: "relative", zIndex: 1, borderTop: `1px solid rgba(0,255,180,0.1)`, padding: "10px 28px", fontFamily: MONO, fontSize: 10, color: "rgba(0,255,180,0.25)", letterSpacing: ".08em", display: "flex", justifyContent: "space-between" }}>
-          <span>ByteOS v11.4 · SISTEMA OPERATIU EN LÍNIA</span>
-          <span>AGENT CONNECTAT · <span style={{ color: C }}>SESSIÓ ACTIVA</span></span>
+          <span>ByteOS v11.4 · SISTEMA OPERATIVO EN LÍNEA</span>
+          <span>AGENTE CONNECTADO · <span style={{ color: C }}>SESIÓN ACTIVA</span></span>
         </footer>
       </div>
     </>

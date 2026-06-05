@@ -5,6 +5,7 @@ import Dashboard from "./pages/Dashboard";
 import Theory from "./pages/Theory";
 import Challenge from "./pages/Challenge";
 import Teacher from "./pages/Teacher";
+import TeacherGroup from "./pages/TeacherGroup";
 
 export default function App() {
   const { user, userData, loading } = useAuth();
@@ -22,12 +23,14 @@ export default function App() {
 
   if (userData?.rol === "professor") {
     return (
-      <BrowserRouter>
-        <Routes>
-          <Route path="*" element={<Teacher userData={userData} />} />
-        </Routes>
-      </BrowserRouter>
-    );
+    <BrowserRouter>
+      <Routes>
+        <Route path="/teacher" element={<Teacher userData={userData} user={user} />} />
+        <Route path="/teacher/group/:groupId" element={<TeacherGroup />} />
+        <Route path="*" element={<Navigate to="/teacher" />} />
+      </Routes>
+    </BrowserRouter>
+  );
   }
 
   return (
