@@ -12,9 +12,22 @@ sector      = "ALPHA-7"
 color_robot = "verd"
 
 # ── Funcions d'utilitat globals ─────────────────────────────
+def derecha():
+    robot.derecha()
+    
+def izquierda():
+    robot.izquierda()
+
+def arriba():
+    robot.arriba()
+
+def abajo():
+    robot.abajo()
+
 def missatge_sistema(text):
     """Mostra un missatge amb prefix del sistema."""
     robot.print_robot(f"[{sistema}] {text}")
+
 def print_robot(text):
     """Mostra un missatge amb prefix del sistema."""
     robot.print_robot(f"{text}")
@@ -78,7 +91,7 @@ texto_edad = str(edat)        # convertir a text
       // ── M1 · R1 ─────────────────────────────────────────
       {
         id: "var_1",
-        title: "Identificación del agente",
+        title: "Información básica del Robot",
         description: `El robot ha olvidado información básica sobre sí mismo. Debes guardar sus datos en variables.
 
 Crea las siguientes variables:
@@ -120,74 +133,76 @@ else:
       // ── M1 · R2 ─────────────────────────────────────────
       {
         id: "var_2",
-        title: "El missatge encriptat",
-        description: `El robot ha de travessar el corredor i pronunciar el codi secret a la sortida.
+        title: "Reconstruir la identificación y la energía",
+        description: `El robot ha recuperado parte de su memoria. Ahora debe calcular su energía total y generar su identificación con su código y nombre. En su memoria, el robot, ha recuperado tres variables: codigo, energia_bateria_1 y energia_bateria_2.
 
-1. Crea \`codi\` concatenant dos textos: \`"BYTE"\` + \`"OS"\`
-2. Crea \`versio\` amb el número \`11\`
-3. Fes que el robot avanci fins a la porta dient:
-   \`robot.print_robot(f"Codi: {codi} v{versio}")\`
-4. Arriba a la porta amb \`robot.dreta()\``,
-        starterCode: `# Crea les variables
-codi = "BYTE" + 
-versio = 
+Crea las siguientes variables:
+- energia (entero): Con la suma de la energía de sus dos baterías
+- identificacion (texto): Concatenando el valor de su código con su nombre
 
-# El robot parla i avança
-robot.print_robot(f"Codi: {codi} v{versio}")
-robot.dreta()
-robot.dreta()
-robot.dreta()
-robot.dreta()`,
+`,
+        starterCode: `# Crea las variables:
+# - energia: suma de las variables energia_bateria_1 y energia_bateria_2
+# - identificacion: concatenando la variable codigo con el nombre
+`,
+        hiddenCode: `
+energia_bateria_1 = 45
+energia_bateria_2 = 30
+codigo = "C43P0"
+`,
+        endCode: `
+if (
+    isinstance(identificacion, str) and
+    isinstance(energia, int) and
+    energia == 75 and
+    codigo in identificacion
+):
+    print_robot(f"-CORRECTO! Identificación: {identificacion}, energia {energia}")
+else:
+    print_robot("-ERROR! Alguna de las variables no es de tipo correcto.")`,
         grid: {
           cols: 6, rows: 3,
           robotStart: [1, 0],
           rocks: [],
-          door: [1, 5]
+          door: []
         },
         solution: (output, actions) =>
-          actions.some(a => a.type === "say") &&
-          actions.some(a => a.type === "door"),
-        hint: 'codi = "BYTE" + "OS" → "BYTEOS". Compte els passos fins a la porta!'
+          actions.some(a => a.type === "say" &&
+            a.text.toLowerCase().includes("-correcto!")),
+        hint: 'codigo = "BYTE" + "OS" → "BYTEOS".'
       },
 
       // ── M1 · R3 ─────────────────────────────────────────
       {
         id: "var_3",
-        title: "El càlcul de combustible",
-        description: `El robot necessita calcular el combustible per escapar i arribar a la porta.
+        title: "Targeta de memoria",
+        description: `El robot ha recuperado suficiente memoria para solicitar una nueva identificación. Para ello debe generar una tarjeta con sus datos principales.`,
+        starterCode: `# Crea las variable nombre (str), nivel (int) y energia (float) 
 
-1. Crea \`distancia\` = 4 (cel·les fins a la porta)
-2. Crea \`consum\` = 2 (unitats per cel·la)
-3. Calcula \`combustible = distancia * consum\`
-4. Fes que el robot digui el resultat i arribi a la porta
+# Concatena todos los valores en la variable targeta
 
-⚠️ Hi ha pedres al camí, has de rodejat-les!`,
-        starterCode: `# Calcula el combustible
-distancia = 
-consum = 
-combustible = 
-
-robot.print_robot(f"Combustible necessari: {combustible} unitats")
-
-# Navega fins a la porta (esquiva les pedres!)
-robot.dreta()
-robot.dreta()
-robot.avall()
-robot.dreta()
-robot.dreta()
-robot.amunt()`,
+`,
+        endCode: `
+if (
+    isinstance(nombre, str) and
+    isinstance(nivel, int) and
+    isinstance(energia, float) and
+    isinstance(targeta, str)
+):
+    print_robot(f"-CORRECTO! Targeta: {targeta}")
+else:
+    print_robot("-ERROR! Alguna de las variables no es de tipo correcto.")`,
         grid: {
-          cols: 7, rows: 4,
+          cols: 6, rows: 3,
           robotStart: [1, 0],
-          rocks: [[1, 2], [1, 3]],
-          door: [1, 6]
+          rocks: [],
+          door: []
         },
         solution: (output, actions) =>
           actions.some(a => a.type === "say" &&
-            a.text.includes("8")) &&
-          actions.some(a => a.type === "door"),
-        hint: 'combustible = distancia * consum = 4 * 2 = 8'
-      }
+            a.text.toLowerCase().includes("-correcto!")),
+        hint: 'codigo = "BYTE" + "OS" → "BYTEOS".'
+      },
     ]
   },
 
@@ -196,40 +211,40 @@ robot.amunt()`,
   // ════════════════════════════════════════════════════════
   {
     id: "condicionals",
-    title: "Sentències condicionals",
+    title: "Sentencias condicionales",
     icon: "🔀",
     color: "green",
     theory: {
       content: `
-## Sentències condicionals
+## Sentencias condicionales
 
-Permeten que el programa prengui **decisions** segons una condició.
+Permiten que el programa tome **decisiones** según una condición.
 
 \`\`\`python
-if condicio:
-    # s'executa si és cert
-elif altra_condicio:
-    # s'executa si l'altra és certa
+if condicion:
+    # se ejecuta si es cierto
+elif otra_condicion:
+    # se ejecuta si la otra es cierta
 else:
-    # s'executa si cap és certa
+    # se ejecuta si ninguna condición es cierta
 \`\`\`
 
-### Operadors de comparació:
-- \`==\` igual · \`!=\` diferent
-- \`>\` major · \`<\` menor
-- \`>=\` major o igual · \`<=\` menor o igual
+### Operadores de comparación:
+- \`==\` igual · \`!=\` diferente
+- \`>\` mayor · \`<\` menor
+- \`>=\` mayor o igual · \`<=\` menor o igual
 
-### Operadors lògics:
-- \`and\` → les dues han de ser certes
-- \`or\`  → n'hi ha prou amb una
-- \`not\` → nega la condició
+### Operadores lógicos:
+- \`and\` → las dos deben ser ciertas
+- \`or\`  → hay suficiente con una condición cierta
+- \`not\` → nega la condición
 
-### Amb el robot:
+### Con el robot:
 \`\`\`python
-if robot.pedra_davant():
-    robot.avall()   # esquiva per baix
+if piedra_delante():
+    abajo()    # esquiva por abajo
 else:
-    robot.dreta()   # segueix recte
+    derecha()  # sigue recto
 \`\`\`
       `
     },
@@ -238,75 +253,56 @@ else:
       // ── M2 · R1 ─────────────────────────────────────────
       {
         id: "cond_1",
-        title: "El semàfor de seguretat",
-        description: `El robot ha de decidir si pot avançar o no.
-
-Crea una variable \`acces\` amb el valor \`True\` o \`False\`.
-
-- Si \`acces\` és \`True\`:
-  → \`robot.print_robot("Accés concedit. Avançant.")\`
-  → \`robot.dreta()\` tres vegades fins a la porta
-- Si \`acces\` és \`False\`:
-  → \`robot.print_robot("Accés denegat. Sistema bloquejat.")\`
-
-Prova amb \`True\` primer per superar el repte.`,
+        title: "Comprobación estado Robot",
+        description: `Debemos comprobar si el robot está activo para poder avanzar.
+`,
         hiddenCode: `
 # Variables del sistema disponibles per a l'alumne
-sistema = "ByteOS"
-versio_sistema = 11.4
-sector_actual = "ALPHA-7"
-
-# Funció d'utilitat disponible
-def info_sistema():
-    return f"{sistema} v{versio_sistema} · Sector {sector_actual}"
+activo = True
 `,
-        starterCode: `acces = True
+        starterCode: `
+# Comprueba si el robot tiene la variable "activo" a True
+#   Si está activo, avanza con la función a derecha() tantas 
+#   veces como sea necesario para llegar a la puerta
 
-if acces:
-    robot.print_robot("Accés concedit. Avançant.")
-    robot.dreta()
-    robot.dreta()
-    robot.dreta()
-else:
-    robot.print_robot("Accés denegat. Sistema bloquejat.")`,
+# Asegurate de comprovar si el robot está activo o no!
+
+
+derecha()
+`,
+        endCode:`
+
+`,
         grid: {
           cols: 5, rows: 3,
           robotStart: [1, 0],
           rocks: [],
           door: [1, 4]
         },
-        solution: (output, actions) =>
-          actions.some(a => a.type === "say" &&
-            a.text.toLowerCase().includes("concedit")) &&
-          actions.some(a => a.type === "door"),
-        hint: 'if acces: → si acces és True, entra al bloc. Recorda la indentació!'
+        solution: (output, actions, code) =>
+          actions.some(a => a.type === "door") && 
+          code.toLowerCase().includes("if activo"),
+        hint: 'if acces: → si acces es True, entrar al bloque. Recuerda la indentación!'
       },
 
       // ── M2 · R2 ─────────────────────────────────────────
       {
         id: "cond_2",
-        title: "Esquiva intel·ligent",
-        description: `El corredor té una pedra! El robot ha de detectar-la i decidir el camí.
+        title: "Transportar carga",
+        description: `Comprueba las variables de capacidad y peso_carga para validar que el robot puede transportar la carga. Sino puede muestra un mensaje con la función print_robot, si puede avanza hasta la puerta.
+`,
+        hiddenCode: `
+capacidad = 120
+print_robot("Capacidad: " + str(capacidad))
+        `,
+        starterCode: `# Comprueba si la capacidad del robot puede soportar la carga
+carga = 90
 
-Usa \`robot.pedra_davant()\` per saber si hi ha obstacle:
-- Si hi ha pedra davant → baixa (\`robot.avall()\`), avança i puja
-- Si no hi ha pedra → avança directe
+# Si el robot soporta la carga, avanza hasta la puerta
 
-El robot ha d'arribar a la porta de sortida.
-
-💡 Pista: necessitaràs diverses comprovacions encadenades.`,
-        starterCode: `# Primera comprovació
-if robot.pedra_davant():
-    robot.avall()
-    robot.dreta()
-    robot.dreta()
-    robot.amunt()
-else:
-    robot.dreta()
-
-# Segueix fins a la porta
-robot.dreta()
-robot.dreta()`,
+# Si no soporta la carga, muestra el mensaje: Carga demasiado pesada!
+print_robot("Carga demasiado pesada!")
+`,
         grid: {
           cols: 7, rows: 4,
           robotStart: [1, 0],
@@ -321,44 +317,69 @@ robot.dreta()`,
       // ── M2 · R3 ─────────────────────────────────────────
       {
         id: "cond_3",
-        title: "El laberint de decisions",
-        description: `El robot és en un laberint i ha de triar el camí correcte a cada cruïlla.
+        title: "Velocidad según energia",
+        description: `Haz avanzar el robot según su nivel de energia, hasta la puerta de salida.
+`,
+        hiddenCode: `
+def derecha():
+    if energia > 70:
+        robot.derecha()
+        robot.derecha()
+        robot.derecha()
+    elif 50 <= energia <= 70:
+        robot.derecha()
+        robot.derecha()
+    else :
+        robot.derecha()
+def izquierda():
+    if energia > 70:
+        robot.izquierda()
+        robot.izquierda()
+        robot.izquierda()
+    elif 50 <= energia <= 70:
+        robot.izquierda()
+        robot.izquierda()
+    else :
+        robot.izquierda()
+def arriba():
+    if energia > 70:
+        robot.arriba()
+        robot.arriba()
+        robot.arriba()
+    elif 50 <= energia <= 70:
+        robot.arriba()
+        robot.arriba()
+    else :
+        robot.arriba()
+def abajo():
+    if energia > 70:
+        robot.abajo()
+        robot.abajo()
+        robot.abajo()
+    elif 50 <= energia <= 70:
+        robot.abajo()
+        robot.abajo()
+    else :
+        robot.abajo()
+import random
+energia = random.randint(1, 3) * 30
+if energia > 70:
+    print_robot("Mi nivel de energia es de: " + str(energia) + ". Avanzo de tres en tres.")
+elif 50 <= energia <= 70 :
+    print_robot("Mi nivel de energia es de: " + str(energia) + ". Avanzo de dos en dos.")
+else : 
+    print_robot("Mi nivel de energia es de: " + str(energia) + ". Avanzo solo una casilla.")
+`,
+        starterCode: `# Cuidado, el nivel de avance dependerá de la energia del robot
+#   Utiliza la sentencia if/elif/else para invocar la función de 
+#   avanzar dependiendo de la energia del robot.
 
-Usa les funcions de detecció:
-- \`robot.pedra_davant()\` → pedra a la dreta
-- \`robot.pedra_amunt()\`  → pedra a dalt
-- \`robot.pedra_avall()\`  → pedra a baix
-
-A cada pas, comprova i decideix. El robot ha de parlar quan trobi la porta:
-\`robot.print_robot("Sortida trobada!")\``,
-        starterCode: `# Pas 1: comprova i mou
-if robot.pedra_davant():
-    robot.avall()
-else:
-    robot.dreta()
-
-# Pas 2
-if robot.pedra_davant():
-    robot.amunt()
-else:
-    robot.dreta()
-
-# Pas 3
-if robot.pedra_davant():
-    robot.amunt()
-else:
-    robot.dreta()
-
-# Pas 4: continua fins a la porta
-robot.dreta()
-robot.dreta()
-
-robot.print_robot("Sortida trobada!")`,
+`,
         grid: {
-          cols: 7, rows: 5,
-          robotStart: [2, 0],
-          rocks: [[2, 1], [0, 2], [1, 2], [3, 2], [4, 2], [2, 4], [2, 5]],
-          door: [1, 6]
+          cols: 7, rows: 7,
+          robotStart: [3, 0],
+          rocks: [[2, 1], [0, 2], [3, 2], [4, 2], [2, 4], [2, 5]],
+          door: [0, 6]
         },
         solution: (output, actions) =>
           actions.some(a => a.type === "door") &&
@@ -373,38 +394,38 @@ robot.print_robot("Sortida trobada!")`,
   // ════════════════════════════════════════════════════════
   {
     id: "iteratives",
-    title: "Sentències iteratives",
+    title: "Sentencias iterativas",
     icon: "🔄",
     color: "purple",
     theory: {
       content: `
-## Sentències iteratives (bucles)
+## Sentencias iterativas (bucles)
 
-Permeten **repetir** instruccions sense escriure-les múltiples vegades.
+Permiten **repetir** instrucciones sin necesidad de escribirlas múltiples veces.
 
 ### Bucle \`for\`:
 \`\`\`python
-for i in range(5):       # repeteix 5 vegades (i = 0,1,2,3,4)
-    robot.dreta()
+for i in range(5):       # repite 5 veces (i = 0,1,2,3,4)
+    derecha()
 
 for i in range(3):
-    robot.print_robot(f"Pas {i+1}")
+    print_robot(f"Paso {i+1}")
 \`\`\`
 
 ### Bucle \`while\`:
 \`\`\`python
-while not robot.pedra_davant():
-    robot.dreta()        # avança mentre no hi hagi pedra
+while not robot.piedra_delante():
+    robot.dreta()        # avanza mientre no tenga una piedra delante
 
-comptador = 0
-while comptador < 5:
-    robot.dreta()
-    comptador += 1
+contador = 0
+while contador < 5:
+    robot.derecha()
+    contador += 1
 \`\`\`
 
-### Control de flux:
-- \`break\`    → surt del bucle immediatament
-- \`continue\` → salta a la següent iteració
+### Control de flujo:
+- \`break\`    → sale del bucle inmediatamente
+- \`continue\` → salta a la siguiente iteración
       `
     },
     challenges: [
@@ -412,24 +433,9 @@ while comptador < 5:
       // ── M3 · R1 ─────────────────────────────────────────
       {
         id: "iter_1",
-        title: "El corredor infinit",
-        description: `El robot ha de recórrer tot el corredor fins a la porta sense saber exactament quants passos té.
-
-Usa un bucle \`while\` amb \`robot.pedra_davant()\` per detectar quan ha arribat a la paret/porta:
-
-\`\`\`python
-while not robot.pedra_davant():
-    robot.dreta()
-\`\`\`
-
-Quan surti del bucle, fes que el robot digui quants passos ha fet i arriba a la porta.`,
-        starterCode: `passos = 0
-
-while not robot.pedra_davant():
-    robot.dreta()
-    passos += 1
-
-robot.print_robot(f"He fet {passos} passos!")`,
+        title: "Optimización del avance",
+        description: `El robot debe llegar a la puerta en como mucho 2 líneas de código.`,
+        starterCode: `# Utiliza la sentencia condicional necesaria`,
         grid: {
           cols: 8, rows: 3,
           robotStart: [1, 0],
@@ -438,9 +444,8 @@ robot.print_robot(f"He fet {passos} passos!")`,
         },
         solution: (output, actions) =>
           actions.filter(a => a.type === "move").length >= 6 &&
-          actions.some(a => a.type === "say") &&
           actions.some(a => a.type === "door"),
-        hint: 'while not robot.pedra_davant() → continua mentre NO hi hagi pedra davant'
+        hint: 'for i in range(9) : derecha() → avanza 9 veces a la derecha'
       },
 
       // ── M3 · R2 ─────────────────────────────────────────
@@ -545,7 +550,7 @@ robot.print_robot("Laberint superat!")`,
   // ════════════════════════════════════════════════════════
   {
     id: "funcions",
-    title: "Funcions",
+    title: "Funciones",
     icon: "⚙️",
     color: "orange",
     theory: {

@@ -6,18 +6,12 @@ import Theory from "./pages/Theory";
 import Challenge from "./pages/Challenge";
 import Teacher from "./pages/Teacher";
 import TeacherGroup from "./pages/TeacherGroup";
+import LoadingScreen from "./components/LoadingScreen";
 
 export default function App() {
   const { user, userData, loading } = useAuth();
 
-  if (loading) return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900">
-      <div className="text-white text-center">
-        <div className="text-6xl mb-4 animate-bounce">🤖</div>
-        <p>Cargando Reprogramando-byte...</p>
-      </div>
-    </div>
-  );
+  if (loading) return <LoadingScreen />;
 
   if (!user) return <Login />;
 

@@ -147,7 +147,9 @@ function TheoryContent({ content }) {
             borderLeft: "3px solid #00ffb4",
             borderRadius: 2, padding: "14px 16px", margin: "14px 0",
             fontFamily: "'Share Tech Mono',monospace", fontSize: 13,
-            lineHeight: 1.8, color: "#7dffd0", overflowX: "auto"
+            lineHeight: 1.8, color: "#7dffd0", overflowX: "auto",
+            whiteSpace: "pre"
+
           }}>
             {codeLines.map((l, j) => <div key={j}>{l || " "}</div>)}
           </div>

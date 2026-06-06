@@ -77,21 +77,36 @@ export default function TeacherGroup() {
         {/* HEADER */}
         <header style={{ background: BG2, borderBottom: `1px solid rgba(0,255,180,.2)`, padding: "12px 28px", display: "flex", alignItems: "center", gap: 16, position: "relative", zIndex: 1 }}>
           <button onClick={() => navigate("/teacher")} style={{ fontFamily: MONO, fontSize: 10, color: "rgba(0,255,180,.5)", background: "none", border: `1px solid rgba(0,255,180,.15)`, padding: "4px 10px", cursor: "pointer", letterSpacing: ".08em" }}>
-            ← TORNAR
+            ← VOLVER
           </button>
           <div style={{ flex: 1 }}>
-            <div style={{ fontFamily: MONO, fontSize: 9, color: "rgba(0,255,180,.4)", letterSpacing: ".18em" }}>// DETALL DEL GRUP</div>
-            <div style={{ fontFamily: ORB, fontSize: 18, fontWeight: 900, color: "#e8f4ff" }}>
-              CODE<span style={{ color: C }}>QUEST</span>
-              <span style={{ color: "rgba(0,255,180,.4)", fontSize: 14, marginLeft: 10 }}>/ {group?.nom}</span>
+            <div style={{
+              fontFamily: ORB,
+              fontSize: 10,
+              fontWeight: 700,
+              color: C,
+              letterSpacing: ".18em",
+            }}>REPROGRAMANDO</div>
+            <div style={{
+              fontFamily: ORB,
+              fontSize: 18,
+              fontWeight: 900,
+              color: "#e8f4ff",
+              letterSpacing: ".06em",
+            }}>
+              BYTE
             </div>
           </div>
           <div style={{ fontFamily: MONO, fontSize: 10, color: "rgba(0,255,180,.4)", border: `1px solid rgba(0,255,180,.15)`, padding: "4px 10px" }}>
-            {alumnes.length} AGENTS · {group?.curs}
+            {alumnes.length} AGENTES · {group?.curs}
           </div>
         </header>
 
         <main style={{ position: "relative", zIndex: 1, padding: "24px 28px" }}>
+          <div style={{ fontFamily: MONO, fontSize: 10, color: "rgba(0,255,180,.4)", letterSpacing: ".18em", marginBottom: 4 }}>// VISIÓN DETALLADA DEL GRUPO</div>
+          <div style={{ fontFamily: ORB, fontSize: 22, fontWeight: 700, color: "#e8f4ff", marginBottom: 18 }}>
+            CONTROL DEL GRUPO  ::  {group?.nom} <span className="cy-cursor" />
+          </div>
           {/* Stats del grup */}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 10, marginBottom: 24 }}>
             {(() => {
@@ -102,10 +117,10 @@ export default function TeacherGroup() {
                 a + Object.values(al.executionCount || {}).reduce((s, n) => s + n, 0), 0);
               const completed100 = alumnes.filter(al => getTotalProgress(al).pct === 100).length;
               return [
-                { v: alumnes.length, l: "AGENTS" },
-                { v: `${avgPct}%`, l: "ASSOLIMENT MIG" },
-                { v: totalExecs, l: "EXECUCIONS TOTALS" },
-                { v: completed100, l: "AGENTS AL 100%" },
+                { v: alumnes.length, l: "AGENTES" },
+                { v: `${avgPct}%`, l: "AVANCE MEDIANO" },
+                { v: totalExecs, l: "EJECUCIONES TOTALES" },
+                { v: completed100, l: "AGENTES AL 100%" },
               ].map(({ v, l }) => (
                 <div key={l} style={{ background: "rgba(2,8,16,.9)", border: `1px solid rgba(0,255,180,.15)`, padding: "12px 16px", position: "relative" }}>
                   <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 1, background: "linear-gradient(90deg,#00ffb4,transparent)", opacity: .5 }} />
@@ -123,7 +138,7 @@ export default function TeacherGroup() {
               <thead>
                 {/* Capçalera blocs */}
                 <tr className="tg-block-header">
-                  <th style={{ textAlign: "left", padding: "10px 14px", minWidth: 160 }}>AGENT</th>
+                  <th style={{ textAlign: "left", padding: "10px 14px", minWidth: 160 }}>AGENTE</th>
                   <th style={{ textAlign: "center" }}>%</th>
                   {BLOCKS.map(b => (
                     <th key={b.id} colSpan={b.challenges.length + 1} style={{ padding: "8px 0" }}>
@@ -133,13 +148,13 @@ export default function TeacherGroup() {
                 </tr>
                 {/* Capçalera activitats */}
                 <tr>
-                  <th className="col-agent" style={{ textAlign: "left", minWidth: 160 }}>NOM</th>
+                  <th className="col-agent" style={{ textAlign: "left", minWidth: 160 }}>NOMBRE</th>
                   <th>GLOBAL</th>
                   {BLOCKS.map(b => (
                     <>
                       {b.challenges.map((ch, ci) => (
                         <th key={ch.id}>P{ci + 1}<br />
-                          <span style={{ fontSize: 8, opacity: .6, letterSpacing: 0 }}>exec</span>
+                          <span style={{ fontSize: 8, opacity: .6, letterSpacing: 0 }}>ejec</span>
                         </th>
                       ))}
                       <th key={`${b.id}-pct`} style={{ color: "rgba(0,255,180,.6)" }}>%</th>
@@ -185,7 +200,7 @@ export default function TeacherGroup() {
                               return (
                                 <td key={ch.id} title={ch.title}>
                                   <div className={done ? "tg-done" : "tg-pend"}>
-                                    {done ? "✓" : "·"}
+                                    {done ? "✓" : "-"}
                                   </div>
                                   <div className="tg-execs">{execs > 0 ? execs : ""}</div>
                                 </td>
@@ -208,7 +223,7 @@ export default function TeacherGroup() {
 
           {/* Llegenda */}
           <div style={{ marginTop: 12, display: "flex", gap: 20 }}>
-            {[["✓", "Repte completat"], ["·", "Pendent"], ["12", "Nº d'execucions"]].map(([sym, label]) => (
+            {[["✓", "Reto completado"], ["-", "Pendiente"], ["12", "Nº de ejecuciones"]].map(([sym, label]) => (
               <div key={label} style={{ display: "flex", alignItems: "center", gap: 6, fontFamily: MONO, fontSize: 10, color: "rgba(0,255,180,.35)" }}>
                 <span style={{ color: sym === "✓" ? C : "rgba(0,255,180,.3)" }}>{sym}</span> {label}
               </div>

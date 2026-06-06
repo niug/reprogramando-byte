@@ -4,6 +4,7 @@ import { BLOCKS, GLOBAL_HIDDEN_CODE } from "../data/curriculum";
 import { useProgress } from "../hooks/useProgress";
 import Editor from "@monaco-editor/react";
 import RobotGrid from "../components/RobotGrid";
+import LoadingScreen from "../components/LoadingScreen";
 
 const GRID_COLS = 8;
 const GRID_ROWS = 8;
@@ -99,10 +100,10 @@ class _Robot:
         else:
             print(f"[ROBOT_WALL][/ROBOT_WALL]")
 
-    def dreta(self):     self._move(0, 1, "dreta")
-    def esquerra(self):  self._move(0, -1, "esquerra")
-    def amunt(self):     self._move(-1, 0, "amunt")
-    def avall(self):     self._move(1, 0, "avall")
+    def derecha(self):     self._move(0, 1, "derecha")
+    def izquierda(self):  self._move(0, -1, "izquierda")
+    def arriba(self):     self._move(-1, 0, "arriba")
+    def abajo(self):     self._move(1, 0, "abajo")
 
     def print_robot(self, text):
         print(f"[ROBOT_SAY]{text}[/ROBOT_SAY]")
@@ -163,8 +164,8 @@ robot = _Robot(${JSON.stringify(challenge.grid.rocks)}, ${challenge.grid.rows}, 
       if (challenge.grid.door) {
         const door = challenge.grid.door;
         let pos = { r: challenge.grid.robotStart[0], c: challenge.grid.robotStart[1] };
-        const DR = { amunt: -1, avall: 1, dreta: 0, esquerra: 0 };
-        const DC = { amunt: 0, avall: 0, dreta: 1, esquerra: -1 };
+        const DR = { arriba: -1, abajo: 1, derecha: 0, izquierda: 0 };
+        const DC = { arriba: 0, abajo: 0, derecha: 1, izquierda: -1 };
         for (const action of collectedActions) {
           if (action.type === "move") {
             pos = { r: pos.r + (DR[action.dir] ?? 0), c: pos.c + (DC[action.dir] ?? 0) };
@@ -178,9 +179,12 @@ robot = _Robot(${JSON.stringify(challenge.grid.rocks)}, ${challenge.grid.rows}, 
       
       setRobotActions(collectedActions);
 
+      console.log(`🚀 ~ runCode ~ outputLines.join("\n"):`, outputLines.join("\n"))
+      console.log("🚀 ~ runCode ~ collectedActions:", collectedActions)
       const passed = challenge.solution(
         outputLines.join("\n"),
         collectedActions,
+        code
       );
       const termMsg =
         outputLines.join("\n") ||
@@ -216,6 +220,9 @@ robot = _Robot(${JSON.stringify(challenge.grid.rocks)}, ${challenge.grid.rows}, 
 
   const S = styles;
 
+  if (!pyodideReady) return (
+    <LoadingScreen />
+  );
   return (
     <div style={S.root}>
       {/* Fonts */}

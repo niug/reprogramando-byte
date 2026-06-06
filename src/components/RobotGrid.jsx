@@ -111,8 +111,8 @@ export default function RobotGrid({ gridConfig, actions, onActionsDone }) {
       const action = actions[i++];
 
       if (action.type === "move") {
-        const DR = { amunt: -1, avall: 1, dreta: 0, esquerra: 0 };
-        const DC = { amunt: 0, avall: 0, dreta: 1, esquerra: -1 };
+        const DR = { arriba: -1, abajo: 1, derecha: 0, izquierda: 0 };
+        const DC = { arriba: 0, abajo: 0, derecha: 1, izquierda: -1 };
         const dr = DR[action.dir] ?? 0;
         const dc = DC[action.dir] ?? 0;
         const nr = pos.r + dr,
@@ -318,7 +318,7 @@ export default function RobotGrid({ gridConfig, actions, onActionsDone }) {
       <div style={{ display: "flex", gap: 16, marginTop: 10 }}>
         {[
           ["🤖", "Robot"],
-          ["🪨", "Pedra"],
+          ["🪨", "Piedra"],
           goal ? ["⭐", "Meta"] : null,
           door
             ? [

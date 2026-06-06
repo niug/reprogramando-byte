@@ -94,31 +94,47 @@ export default function Teacher({ userData, user }) {
         {/* HEADER */}
         <header style={{ background: BG2, borderBottom: `1px solid rgba(0,255,180,.2)`, padding: "12px 28px", display: "flex", alignItems: "center", justifyContent: "space-between", position: "relative", zIndex: 1 }}>
           <div>
-            <div style={{ fontFamily: MONO, fontSize: 9, color: "rgba(0,255,180,.4)", letterSpacing: ".18em" }}>// PANEL DE COMANDAMENT</div>
-            <div style={{ fontFamily: ORB, fontSize: 20, fontWeight: 900, color: "#e8f4ff" }}>CODE<span style={{ color: C }}>QUEST</span></div>
+            <div>
+              <div style={{
+              fontFamily: ORB,
+              fontSize: 10,
+              fontWeight: 700,
+              color: C,
+              letterSpacing: ".18em",
+            }}>REPROGRAMANDO</div>
+            <div style={{
+              fontFamily: ORB,
+              fontSize: 18,
+              fontWeight: 900,
+              color: "#e8f4ff",
+              letterSpacing: ".06em",
+            }}>
+              BYTE
+            </div>
+            </div>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
             <div style={{ fontFamily: MONO, fontSize: 10, color: "rgba(0,255,180,.4)", letterSpacing: ".1em", border: `1px solid rgba(0,255,180,.2)`, padding: "4px 10px" }}>
-              👨‍🏫 COMANDANT · {userData?.nom?.toUpperCase()}
+              👨‍🏫 COMANDANTE · {userData?.nom?.toUpperCase()}
             </div>
             <button onClick={() => signOut(auth)} style={{ fontFamily: MONO, fontSize: 10, color: "rgba(0,255,180,.35)", background: "none", border: `1px solid rgba(0,255,180,.15)`, padding: "4px 10px", cursor: "pointer", letterSpacing: ".08em" }}>
-              DESCONNECTAR
+              DESCONECTAR
             </button>
           </div>
         </header>
 
         <main style={{ position: "relative", zIndex: 1, padding: "28px" }}>
-          <div style={{ fontFamily: MONO, fontSize: 10, color: "rgba(0,255,180,.4)", letterSpacing: ".18em", marginBottom: 4 }}>// VISIÓ GLOBAL DEL SISTEMA</div>
+          <div style={{ fontFamily: MONO, fontSize: 10, color: "rgba(0,255,180,.4)", letterSpacing: ".18em", marginBottom: 4 }}>// VISIÓN GLOBAL DEL SISTEMA</div>
           <div style={{ fontFamily: ORB, fontSize: 22, fontWeight: 700, color: "#e8f4ff", marginBottom: 18 }}>
-            CENTRE DE CONTROL <span className="cy-cursor" />
+            CENTRO DE CONTROL <span className="cy-cursor" />
           </div>
 
           {/* Stats globals */}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 10, marginBottom: 28 }}>
             {[
-              { val: groups.length, label: "GRUPS ACTIUS" },
-              { val: totalAlumnes, label: "AGENTS TOTALS" },
-              { val: `${globalPct}%`, label: "ASSOLIMENT GLOBAL" },
+              { val: groups.length, label: "GRUPOS ACTIVOS" },
+              { val: totalAlumnes, label: "AGENTES TOTALES" },
+              { val: `${globalPct}%`, label: "AVANCE GLOBAL" },
             ].map(({ val, label }) => (
               <div key={label} style={{ background: "rgba(2,8,16,.9)", border: `1px solid rgba(0,255,180,.15)`, padding: "14px 18px", position: "relative" }}>
                 <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 1, background: "linear-gradient(90deg,#00ffb4,transparent)", opacity: .5 }} />
@@ -130,9 +146,9 @@ export default function Teacher({ userData, user }) {
 
           {/* Capçalera grups */}
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
-            <div style={{ fontFamily: ORB, fontSize: 13, color: "#e8f4ff", letterSpacing: ".08em" }}>// GRUPS D'AGENTS</div>
+            <div style={{ fontFamily: ORB, fontSize: 13, color: "#e8f4ff", letterSpacing: ".08em" }}>// GRUPOS DE AGENTES</div>
             <button onClick={() => setShowModal(true)} style={{ background: C, color: "#020c1b", fontFamily: ORB, fontSize: 10, fontWeight: 700, letterSpacing: ".14em", border: "none", padding: "9px 16px", cursor: "pointer" }}>
-              + CREAR NOU GRUP
+              + CREAR NUEVO GRUPO
             </button>
           </div>
 
@@ -145,16 +161,16 @@ export default function Teacher({ userData, user }) {
                   <div style={{ height: 2, background: `linear-gradient(90deg,${C},transparent)` }} />
                   <div style={{ padding: "16px 18px" }}>
                     <div style={{ fontFamily: MONO, fontSize: 9, color: "rgba(0,255,180,.4)", letterSpacing: ".15em", marginBottom: 6 }}>
-                      // GRUP ACTIU · {grp.curs || "2025-26"}
+                      // GRUPO ACTIVO · {grp.curs || "2025-26"}
                     </div>
                     <div style={{ fontFamily: ORB, fontSize: 18, fontWeight: 700, color: "#e8f4ff", letterSpacing: ".06em", marginBottom: 12 }}>
                       {grp.nom}
                     </div>
                     <div style={{ display: "flex", gap: 20, marginBottom: 12 }}>
                       {[
-                        { v: st.alumnes, l: "AGENTS" },
-                        { v: `${st.pct}%`, l: "ASSOLIMENT" },
-                        { v: st.executions, l: "EXECUCIONS" },
+                        { v: st.alumnes, l: "AGENTES" },
+                        { v: `${st.pct}%`, l: "AVANCE" },
+                        { v: st.executions, l: "EJECUCIONES" },
                       ].map(({ v, l }) => (
                         <div key={l}>
                           <div style={{ fontFamily: ORB, fontSize: 18, fontWeight: 700, color: C }}>{v}</div>
@@ -167,10 +183,10 @@ export default function Teacher({ userData, user }) {
                     </div>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                       <span style={{ fontFamily: MONO, fontSize: 10, color: C, border: `1px solid rgba(0,255,180,.3)`, padding: "3px 10px" }}>
-                        VEURE DETALL →
+                        VER DETALLE →
                       </span>
                       <span style={{ fontFamily: MONO, fontSize: 10, color: "rgba(0,255,180,.4)" }}>
-                        {st.alumnes} agents registrats
+                        {st.alumnes} agentes registrados
                       </span>
                     </div>
                   </div>
@@ -188,7 +204,7 @@ export default function Teacher({ userData, user }) {
               onMouseLeave={e => e.currentTarget.style.borderColor = "rgba(0,255,180,.15)"}>
               <div style={{ textAlign: "center" }}>
                 <div style={{ fontFamily: ORB, fontSize: 32, color: "rgba(0,255,180,.25)", marginBottom: 8 }}>+</div>
-                <div style={{ fontFamily: MONO, fontSize: 10, color: "rgba(0,255,180,.3)", letterSpacing: ".12em" }}>CREAR NOU GRUP</div>
+                <div style={{ fontFamily: MONO, fontSize: 10, color: "rgba(0,255,180,.3)", letterSpacing: ".12em" }}>CREAR NUEVO GRUPO</div>
               </div>
             </div>
           </div>
