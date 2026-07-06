@@ -291,62 +291,43 @@ while contador < 5:
 ### Control de flujo:
 - \`break\`    → sale del bucle inmediatamente
 - \`continue\` → salta a la siguiente iteración
-      `},challenges:[{id:`iter_1`,title:`Optimización del avance`,description:`El robot debe llegar a la puerta en como mucho 2 líneas de código.`,starterCode:`# Utiliza la sentencia condicional necesaria`,grid:{cols:8,rows:3,robotStart:[1,0],rocks:[],door:[1,7]},solution:(e,t)=>t.filter(e=>e.type===`move`).length>=6&&t.some(e=>e.type===`door`),hint:`for i in range(9) : derecha() → avanza 9 veces a la derecha`},{id:`iter_2`,title:`El serpentí`,description:`El robot ha de recórrer el mapa en forma de serpentí (com una S) per arribar a la porta.
-
-Usa \`for\` i \`range()\` per repetir els moviments:
-- 3 passos a la dreta
-- 1 pas avall
-- 3 passos a l'esquerra  
-- 1 pas avall
-- Continua fins a la porta
-
-El robot ha de dir quantes files ha recorregut.`,starterCode:`files = 0
-
-# Fila 0: vés a la dreta
-for i in range(3):
-    robot.dreta()
-
-robot.avall()
-files += 1
-
-# Fila 1: vés a l'esquerra
-for i in range(3):
-    robot.esquerra()
-
-robot.avall()
-files += 1
-
-# Fila 2: vés a la dreta fins a la porta
-for i in range(3):
-    robot.dreta()
-
-robot.print_robot(f"He recorregut {files} files!")`,grid:{cols:5,rows:5,robotStart:[0,0],rocks:[[1,4],[3,0]],door:[2,4]},solution:(e,t)=>t.some(e=>e.type===`door`)&&t.some(e=>e.type===`say`),hint:`Pensa en el recorregut: → ↓ ← ↓ → fins arribar a la porta`},{id:`iter_3`,title:`El laberint automàtic`,description:`El robot ha de navegar un laberint complex de forma automàtica.
-
-Usa un bucle \`for i in range(20)\` i dins comprova cada direcció:
-
-\`\`\`python
-for i in range(20):
-    if not robot.pedra_davant():
-        robot.dreta()
-    elif not robot.pedra_avall():
-        robot.avall()
-    elif not robot.pedra_amunt():
-        robot.amunt()
-\`\`\`
-
-Quan arribi a la porta, el robot ha de dir: \`"Laberint superat en {i+1} iteracions!"\`
-
-⚠️ Pista: potser cal ajustar l'ordre de preferència de direccions!`,starterCode:`for i in range(20):
-    if not robot.pedra_davant():
-        robot.dreta()
-    elif not robot.pedra_avall():
-        robot.avall()
-    elif not robot.pedra_amunt():
-        robot.amunt()
-    else:
-        robot.esquerra()
-
-robot.print_robot("Laberint superat!")`,grid:{cols:8,rows:6,robotStart:[0,0],rocks:[[0,2],[1,0],[1,1],[1,3],[1,4],[2,4],[3,2],[3,3],[3,5],[4,1],[4,5],[5,3],[5,4],[2,6],[4,6]],door:[0,7]},solution:(e,t)=>t.some(e=>e.type===`door`)&&t.some(e=>e.type===`say`),hint:`L'ordre de les condicions importa. Prova: dreta → amunt → avall`}]},{id:`funcions`,title:`Funciones`,icon:`⚙️`,color:`orange`,theory:{content:`
+      `},challenges:[{id:`iter_1`,title:`Optimización del avance`,description:`El robot debe llegar a la puerta en como mucho 2 líneas de código.`,starterCode:`# Utiliza la sentencia iterativa necesaria`,grid:{cols:8,rows:3,robotStart:[1,0],rocks:[],door:[1,7]},solution:(e,t,n)=>n.split(`
+`).filter(e=>e.trim()!==``&&!e.trim().startsWith(`#`)).length<=2&&t.filter(e=>e.type===`move`).length>=6&&t.some(e=>e.type===`door`),hint:`for i in range(9) : derecha() → avanza 9 veces a la derecha`},{id:`iter_2`,title:`Avance hasta fin de energia`,description:`El robot debe recorrer la cuadrícula hasta que se quede sin energía.`,starterCode:`# Utiliza la sentencia iterativa necesaria
+print_robot("Energia inicial: " + str(energia_robot))
+`,hiddenCode:`
+energia_robot = 6
+def robot_dice(texto):
+        robot.say(texto)
+def check_energy(energia_robot):
+    if energia_robot <= 0:
+      print_robot("ROBOT SIN ENERGIA")
+def abajo():
+    global energia_robot
+    if energia_robot > 0:
+      robot.abajo()
+      energia_robot -= 1
+    check_energy(energia_robot)
+      
+def arriba() :
+    global energia_robot
+    if energia_robot > 0:
+      robot.arriba()
+      energia_robot -= 1
+    check_energy(energia_robot)
+def derecha() :
+    global energia_robot
+    if energia_robot > 0:
+      robot.derecha()
+      energia_robot -= 1
+    check_energy(energia_robot)
+def izquierda() :
+    global energia_robot
+    if energia_robot > 0:
+      robot.izquierda()
+      energia_robot -= 1
+    check_energy(energia_robot)
+`,grid:{cols:5,rows:5,robotStart:[0,0],rocks:[],door:[]},solution:(e,t,n)=>t.some(e=>e.type===`say`&&e.text===`ROBOT SIN ENERGIA`)&&n.includes(`while `),hint:``},{id:`iter_3`,title:`2 vueltas`,description:`El robot debe dar 2 vueltas esquivando las piedras`,grid:{cols:5,rows:5,robotStart:[0,0],rocks:[],door:[0,7]},starterCode:`# Utiliza la sentencia iterativa necesaria
+        `,solution:(e,t)=>t.some(e=>e.type===`door`)&&t.some(e=>e.type===`say`),hint:`L'ordre de les condicions importa. Prova: dreta → amunt → avall`}]},{id:`funcions`,title:`Funciones`,icon:`⚙️`,color:`orange`,theory:{content:`
 ## Funcions
 
 Les funcions permeten **reutilitzar codi** donant-li un nom.
