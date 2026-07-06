@@ -50,7 +50,6 @@ def minim(a, b):
 `;
 
 export const BLOCKS = [
-
   // ════════════════════════════════════════════════════════
   //  MÒDUL 1 — TIPOS DE DADES I VARIABLES
   // ════════════════════════════════════════════════════════
@@ -84,10 +83,9 @@ salutacion = "Hola, " + nom   # concatenar text
 doble = edad * 2              # multiplicar
 texto_edad = str(edat)        # convertir a text
 \`\`\`
-      `
+      `,
     },
     challenges: [
-
       // ── M1 · R1 ─────────────────────────────────────────
       {
         id: "var_1",
@@ -118,16 +116,19 @@ else:
     print_robot("-ERROR! Alguna de las variables no es de tipo correcto.")`,
 
         grid: {
-          cols: 6, rows: 4,
+          cols: 6,
+          rows: 4,
           robotStart: [1, 0],
           rocks: [],
-          door: null
+          door: null,
         },
         // Superado si el robot habla e incluye el texto correcto
         solution: (output, actions) =>
-          actions.some(a => a.type === "say" &&
-            a.text.toLowerCase().includes("-correcto!")),
-        hint: 'nom = "Anna" — recuerda las comillas para los textos!'
+          actions.some(
+            (a) =>
+              a.type === "say" && a.text.toLowerCase().includes("-correcto!"),
+          ),
+        hint: 'nom = "Anna" — recuerda las comillas para los textos!',
       },
 
       // ── M1 · R2 ─────────────────────────────────────────
@@ -161,15 +162,18 @@ if (
 else:
     print_robot("-ERROR! Alguna de las variables no es de tipo correcto.")`,
         grid: {
-          cols: 6, rows: 3,
+          cols: 6,
+          rows: 3,
           robotStart: [1, 0],
           rocks: [],
-          door: []
+          door: [],
         },
         solution: (output, actions) =>
-          actions.some(a => a.type === "say" &&
-            a.text.toLowerCase().includes("-correcto!")),
-        hint: 'codigo = "BYTE" + "OS" → "BYTEOS".'
+          actions.some(
+            (a) =>
+              a.type === "say" && a.text.toLowerCase().includes("-correcto!"),
+          ),
+        hint: 'codigo = "BYTE" + "OS" → "BYTEOS".',
       },
 
       // ── M1 · R3 ─────────────────────────────────────────
@@ -193,17 +197,20 @@ if (
 else:
     print_robot("-ERROR! Alguna de las variables no es de tipo correcto.")`,
         grid: {
-          cols: 6, rows: 3,
+          cols: 6,
+          rows: 3,
           robotStart: [1, 0],
           rocks: [],
-          door: []
+          door: [],
         },
         solution: (output, actions) =>
-          actions.some(a => a.type === "say" &&
-            a.text.toLowerCase().includes("-correcto!")),
-        hint: 'codigo = "BYTE" + "OS" → "BYTEOS".'
+          actions.some(
+            (a) =>
+              a.type === "say" && a.text.toLowerCase().includes("-correcto!"),
+          ),
+        hint: 'codigo = "BYTE" + "OS" → "BYTEOS".',
       },
-    ]
+    ],
   },
 
   // ════════════════════════════════════════════════════════
@@ -246,10 +253,9 @@ if piedra_delante():
 else:
     derecha()  # sigue recto
 \`\`\`
-      `
+      `,
     },
     challenges: [
-
       // ── M2 · R1 ─────────────────────────────────────────
       {
         id: "cond_1",
@@ -270,19 +276,20 @@ activo = True
 
 derecha()
 `,
-        endCode:`
+        endCode: `
 
 `,
         grid: {
-          cols: 5, rows: 3,
+          cols: 5,
+          rows: 3,
           robotStart: [1, 0],
           rocks: [],
-          door: [1, 4]
+          door: [1, 4],
         },
         solution: (output, actions, code) =>
-          actions.some(a => a.type === "door") && 
+          actions.some((a) => a.type === "door") &&
           code.toLowerCase().includes("if activo"),
-        hint: 'if acces: → si acces es True, entrar al bloque. Recuerda la indentación!'
+        hint: "if acces: → si acces es True, entrar al bloque. Recuerda la indentación!",
       },
 
       // ── M2 · R2 ─────────────────────────────────────────
@@ -304,14 +311,17 @@ carga = 90
 print_robot("Carga demasiado pesada!")
 `,
         grid: {
-          cols: 7, rows: 4,
+          cols: 7,
+          rows: 4,
           robotStart: [1, 0],
-          rocks: [[1, 1], [1, 2]],
-          door: [1, 6]
+          rocks: [
+            [1, 1],
+            [1, 2],
+          ],
+          door: [1, 6],
         },
-        solution: (output, actions) =>
-          actions.some(a => a.type === "door"),
-        hint: 'robot.pedra_davant() retorna True si hi ha pedra a la dreta del robot'
+        solution: (output, actions) => actions.some((a) => a.type === "door"),
+        hint: "robot.pedra_davant() retorna True si hi ha pedra a la dreta del robot",
       },
 
       // ── M2 · R3 ─────────────────────────────────────────
@@ -376,17 +386,25 @@ else :
 
 `,
         grid: {
-          cols: 7, rows: 7,
+          cols: 7,
+          rows: 7,
           robotStart: [3, 0],
-          rocks: [[2, 1], [0, 2], [3, 2], [4, 2], [2, 4], [2, 5]],
-          door: [0, 6]
+          rocks: [
+            [2, 1],
+            [0, 2],
+            [3, 2],
+            [4, 2],
+            [2, 4],
+            [2, 5],
+          ],
+          door: [0, 6],
         },
         solution: (output, actions) =>
-          actions.some(a => a.type === "door") &&
-          actions.some(a => a.type === "say"),
-        hint: 'Simula pas a pas: on és el robot? Quines pedres té al voltant?'
-      }
-    ]
+          actions.some((a) => a.type === "door") &&
+          actions.some((a) => a.type === "say"),
+        hint: "Simula pas a pas: on és el robot? Quines pedres té al voltant?",
+      },
+    ],
   },
 
   // ════════════════════════════════════════════════════════
@@ -426,123 +444,110 @@ while contador < 5:
 ### Control de flujo:
 - \`break\`    → sale del bucle inmediatamente
 - \`continue\` → salta a la siguiente iteración
-      `
+      `,
     },
     challenges: [
-
       // ── M3 · R1 ─────────────────────────────────────────
       {
         id: "iter_1",
         title: "Optimización del avance",
         description: `El robot debe llegar a la puerta en como mucho 2 líneas de código.`,
-        starterCode: `# Utiliza la sentencia condicional necesaria`,
+        starterCode: `# Utiliza la sentencia iterativa necesaria`,
         grid: {
-          cols: 8, rows: 3,
+          cols: 8,
+          rows: 3,
           robotStart: [1, 0],
           rocks: [],
-          door: [1, 7]
+          door: [1, 7],
         },
-        solution: (output, actions) =>
-          actions.filter(a => a.type === "move").length >= 6 &&
-          actions.some(a => a.type === "door"),
-        hint: 'for i in range(9) : derecha() → avanza 9 veces a la derecha'
+        solution: (output, actions, code) => {
+          const liniesDeCode = code
+            .split("\n")
+            .filter((l) => l.trim() !== "" && !l.trim().startsWith("#")).length;
+          return (
+            liniesDeCode <= 2 &&
+            actions.filter((a) => a.type === "move").length >= 6 &&
+            actions.some((a) => a.type === "door")
+          );
+        },
+        hint: "for i in range(9) : derecha() → avanza 9 veces a la derecha",
       },
 
       // ── M3 · R2 ─────────────────────────────────────────
       {
         id: "iter_2",
-        title: "El serpentí",
-        description: `El robot ha de recórrer el mapa en forma de serpentí (com una S) per arribar a la porta.
-
-Usa \`for\` i \`range()\` per repetir els moviments:
-- 3 passos a la dreta
-- 1 pas avall
-- 3 passos a l'esquerra  
-- 1 pas avall
-- Continua fins a la porta
-
-El robot ha de dir quantes files ha recorregut.`,
-        starterCode: `files = 0
-
-# Fila 0: vés a la dreta
-for i in range(3):
-    robot.dreta()
-
-robot.avall()
-files += 1
-
-# Fila 1: vés a l'esquerra
-for i in range(3):
-    robot.esquerra()
-
-robot.avall()
-files += 1
-
-# Fila 2: vés a la dreta fins a la porta
-for i in range(3):
-    robot.dreta()
-
-robot.print_robot(f"He recorregut {files} files!")`,
+        title: "Avance hasta fin de energia",
+        description: `El robot debe recorrer la cuadrícula hasta que se quede sin energía.`,
+        starterCode: `# Utiliza la sentencia iterativa necesaria
+print_robot("Energia inicial: " + str(energia_robot))
+`,
+        hiddenCode: `
+energia_robot = 6
+def robot_dice(texto):
+        robot.say(texto)
+def check_energy(energia_robot):
+    if energia_robot <= 0:
+      print_robot("ROBOT SIN ENERGIA")
+def abajo():
+    global energia_robot
+    if energia_robot > 0:
+      robot.abajo()
+      energia_robot -= 1
+    check_energy(energia_robot)
+      
+def arriba() :
+    global energia_robot
+    if energia_robot > 0:
+      robot.arriba()
+      energia_robot -= 1
+    check_energy(energia_robot)
+def derecha() :
+    global energia_robot
+    if energia_robot > 0:
+      robot.derecha()
+      energia_robot -= 1
+    check_energy(energia_robot)
+def izquierda() :
+    global energia_robot
+    if energia_robot > 0:
+      robot.izquierda()
+      energia_robot -= 1
+    check_energy(energia_robot)
+`,
         grid: {
-          cols: 5, rows: 5,
+          cols: 5,
+          rows: 5,
           robotStart: [0, 0],
-          rocks: [[1, 4], [3, 0]],
-          door: [2, 4]
+          rocks: [],
+          door: [],
         },
-        solution: (output, actions) =>
-          actions.some(a => a.type === "door") &&
-          actions.some(a => a.type === "say"),
-        hint: 'Pensa en el recorregut: → ↓ ← ↓ → fins arribar a la porta'
+        solution: (output, actions, code) =>
+          actions.some((a) => a.type === "say" && a.text === "ROBOT SIN ENERGIA") &&
+          code.includes("while "),
+        hint: "",
       },
 
       // ── M3 · R3 ─────────────────────────────────────────
       {
         id: "iter_3",
-        title: "El laberint automàtic",
-        description: `El robot ha de navegar un laberint complex de forma automàtica.
-
-Usa un bucle \`for i in range(20)\` i dins comprova cada direcció:
-
-\`\`\`python
-for i in range(20):
-    if not robot.pedra_davant():
-        robot.dreta()
-    elif not robot.pedra_avall():
-        robot.avall()
-    elif not robot.pedra_amunt():
-        robot.amunt()
-\`\`\`
-
-Quan arribi a la porta, el robot ha de dir: \`"Laberint superat en {i+1} iteracions!"\`
-
-⚠️ Pista: potser cal ajustar l'ordre de preferència de direccions!`,
-        starterCode: `for i in range(20):
-    if not robot.pedra_davant():
-        robot.dreta()
-    elif not robot.pedra_avall():
-        robot.avall()
-    elif not robot.pedra_amunt():
-        robot.amunt()
-    else:
-        robot.esquerra()
-
-robot.print_robot("Laberint superat!")`,
+        title: "2 vueltas",
+        description: `El robot debe dar 2 vueltas esquivando las piedras`,
         grid: {
-          cols: 8, rows: 6,
+          cols: 5,
+          rows: 5,
           robotStart: [0, 0],
           rocks: [
-            [0, 2], [1, 0], [1, 1], [1, 3], [1, 4],
-            [2, 4], [3, 2], [3, 3], [3, 5], [4, 1],
-            [4, 5], [5, 3], [5, 4], [2, 6], [4, 6]
           ],
-          door: [0, 7]
+          door: [0, 7],
         },
+        starterCode: `# Utiliza la sentencia iterativa necesaria
+        `,
         solution: (output, actions) =>
-          actions.some(a => a.type === "door") &&
-          actions.some(a => a.type === "say"),
-        hint: "L'ordre de les condicions importa. Prova: dreta → amunt → avall"
-      }
-    ]
+          actions.some((a) => a.type === "door") &&
+          actions.some((a) => a.type === "say"),
+        hint: "L'ordre de les condicions importa. Prova: dreta → amunt → avall",
+      },
+    ],
   },
 
   // ════════════════════════════════════════════════════════
@@ -589,10 +594,9 @@ def esquivar():
     else:
         robot.dreta()
 \`\`\`
-      `
+      `,
     },
     challenges: [
-
       // ── M4 · R1 ─────────────────────────────────────────
       {
         id: "func_1",
@@ -616,18 +620,24 @@ comunicar("Sistema inicialitzat", "baixa")
 comunicar("Porta detectada", "alta")
 comunicar("Explorant sector", "baixa")`,
         grid: {
-          cols: 5, rows: 4,
+          cols: 5,
+          rows: 4,
           robotStart: [1, 0],
           rocks: [],
-          door: null
+          door: null,
         },
         solution: (output, actions) => {
-          const says = actions.filter(a => a.type === "say");
-          return says.length >= 3 &&
-            says.some(a => a.text.includes("[URGENT]") &&
-              a.text.toLowerCase().includes("porta"));
+          const says = actions.filter((a) => a.type === "say");
+          return (
+            says.length >= 3 &&
+            says.some(
+              (a) =>
+                a.text.includes("[URGENT]") &&
+                a.text.toLowerCase().includes("porta"),
+            )
+          );
         },
-        hint: 'if prioritat == "alta": — recorda les cometes al comparar textos'
+        hint: 'if prioritat == "alta": — recorda les cometes al comparar textos',
       },
 
       // ── M4 · R2 ─────────────────────────────────────────
@@ -657,15 +667,24 @@ anar_dreta(3)
 anar_avall(2)
 anar_dreta(3)`,
         grid: {
-          cols: 8, rows: 5,
+          cols: 8,
+          rows: 5,
           robotStart: [0, 0],
-          rocks: [[0, 4], [0, 5], [0, 6], [1, 4], [2, 0], [2, 1], [2, 2]],
-          door: [2, 6]
+          rocks: [
+            [0, 4],
+            [0, 5],
+            [0, 6],
+            [1, 4],
+            [2, 0],
+            [2, 1],
+            [2, 2],
+          ],
+          door: [2, 6],
         },
         solution: (output, actions) =>
-          actions.some(a => a.type === "door") &&
-          actions.filter(a => a.type === "say").length >= 2,
-        hint: "Segueix el camí en L: dreta, avall, dreta. Quants passos a cada tram?"
+          actions.some((a) => a.type === "door") &&
+          actions.filter((a) => a.type === "say").length >= 2,
+        hint: "Segueix el camí en L: dreta, avall, dreta. Quants passos a cada tram?",
       },
 
       // ── M4 · R3 ─────────────────────────────────────────
@@ -701,21 +720,33 @@ def explorar(max_passos):
 
 explorar(15)`,
         grid: {
-          cols: 9, rows: 6,
+          cols: 9,
+          rows: 6,
           robotStart: [2, 0],
           rocks: [
-            [0, 1], [1, 1], [3, 1], [4, 1],
-            [2, 3], [0, 3], [1, 3], [4, 3], [5, 3],
-            [2, 5], [3, 5], [1, 6], [4, 6],
-            [0, 7], [5, 7]
+            [0, 1],
+            [1, 1],
+            [3, 1],
+            [4, 1],
+            [2, 3],
+            [0, 3],
+            [1, 3],
+            [4, 3],
+            [5, 3],
+            [2, 5],
+            [3, 5],
+            [1, 6],
+            [4, 6],
+            [0, 7],
+            [5, 7],
           ],
-          door: [2, 8]
+          door: [2, 8],
         },
         solution: (output, actions) =>
-          actions.some(a => a.type === "door") &&
-          actions.some(a => a.type === "say"),
-        hint: "La funció esquivar() ha de gestionar tots els casos. Prova ordre: dreta → amunt → avall → esquerra"
-      }
-    ]
-  }
+          actions.some((a) => a.type === "door") &&
+          actions.some((a) => a.type === "say"),
+        hint: "La funció esquivar() ha de gestionar tots els casos. Prova ordre: dreta → amunt → avall → esquerra",
+      },
+    ],
+  },
 ];
